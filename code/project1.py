@@ -17,5 +17,5 @@ temp, humid = unpack('ii', decoded_data)
 temp_dec = temp * 10**(-2)
 humid_dec = humid * 10**(-2)
 
-print("The extracted temperature is %s." % temp_dec)
-print("The extracted humidity is %s." % humid_dec)
+print(f"The extracted temperature is {temp_dec}.")
+print(f"The extracted humidity is {humid_dec}.")
