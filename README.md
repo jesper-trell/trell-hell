@@ -1,3 +1,3 @@
-# trell-hell
+# Trell Hell
 
 Introduction to Trell.
