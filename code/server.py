@@ -3,15 +3,14 @@ import data_functions
 
 # To-Do List:
 # - Add more accept() statements to accept multiple clients.
-# - Misbehaving clients should be disconnected.
 
 # Starts server, which receives and prints incoming sensor data.
 def start_server():
-    host = "127.0.0.1"  # Standard loopback interface address (localhost)
-    port = 65432        # Port to listen on (non-privileged ports are > 1023)
+    HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
+    PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        sock.bind((host, port))
+        sock.bind((HOST, PORT))
         sock.listen()
         conn, addr = sock.accept()
         print ("Connected by", addr)
@@ -26,6 +25,3 @@ def start_server():
 
             if not data: 
                 break
-
-start_server()
-

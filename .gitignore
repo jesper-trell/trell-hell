@@ -1,0 +1,5 @@
+code/__pycache__/
+code/.pytest_cache/
+code/.vscode/
+*.pyc
+*.pyc

@@ -1,12 +1,17 @@
+import threading
 import data_functions
+import client
+import server
+import multi_server
 
 
-# Data encoded according to the base64 protocol.
-encoded_data = "NAkAALoLAAA="
+CLIENTS = 10
 
-# Parses the data.
-temp, humid = data_functions.package_parser(encoded_data)
+# Starts and runs the server.
+server_thread = threading.Thread(target=multi_server.start_server, args=())
+server_thread.start()
 
-# Formats and prints the output.
-print(f"The extracted temperature is {temp}.")
-print(f"The extracted humidity is {humid}.")
+# Starts a specified number of clients.
+for i in range(CLIENTS):
+    thread = threading.Thread(target=client.start_client, args=())
+    thread.start()
