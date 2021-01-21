@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,6 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = [
+    ('Jesper', 'jesper@trell.se'),
+]
+
+SERVER_EMAIL = 'info@trell.se'
+
 
 # Application definition
 
@@ -37,6 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
+    'nothotdog',
+    'nothotdog.photos',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +85,14 @@ WSGI_APPLICATION = 'nothotdog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'photos',
+        'USER': 'postgres',
+        'PASSWORD': 'admin1',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -105,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Stockholm'
 
 USE_I18N = True
 
@@ -118,3 +134,45 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "assets"),
+    os.path.join(BASE_DIR, "node_modules"),
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+COMPRESS_OFFLINE = False
+
+COMPRESS_OUTPUT_DIR = ''
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
+NODE_ENV = 'development' if DEBUG else 'production'
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'node_modules/.bin/node-sass {infile} {outfile}'),
+    ('text/jsx', 'NODE_ENV={} node_modules/.bin/browserifyinc '
+                 '--debug '
+                 '-t babelify {{infile}} -o {{outfile}}'.format(NODE_ENV)),
+)
+
+if not DEBUG:
+    COMPRESS_OFFLINE = True
+    COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'node_modules/.bin/node-sass {infile} {outfile}'),
+    ('text/jsx', 'NODE_ENV=production node_modules/.bin/browserify '
+                 '-t babelify {infile} -o {outfile}'),
+)
