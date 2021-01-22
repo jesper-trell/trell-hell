@@ -1,0 +1,15 @@
+{% if photos_list %}
+    <ul>
+    {% for photo in photos_list %}
+        <form action="/photos/photo" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="photo" value={{photo.pk}}>
+            <a href="/photos/photo"><button type="submit" onclick="clearCookie()">{{photo}}</button></a>
+        </form>
+
+        <!-- <li><a href="/photos/{{ photo.id }}/">{{ photo.photo_title }}</a></li> -->
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No photos are available.</p>
+{% endif %}

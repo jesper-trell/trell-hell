@@ -20,7 +20,7 @@ from django.conf import settings
 
 
 urlpatterns = [
-    path('photos/', include('nothotdog.photos.urls', namespace='photos')),
+    path('photos/', include('nothotdog.photos.urls')),
     path('admin/', admin.site.urls),
 ]
 
