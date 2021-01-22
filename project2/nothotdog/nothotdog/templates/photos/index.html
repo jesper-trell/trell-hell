@@ -1,11 +1,12 @@
 {% if photos_list %}
     <ul>
     {% for photo in photos_list %}
-        <form action="/photos/photo" method="post">
+        <!-- <form action="/photos/photo" method="post">
             {% csrf_token %}
             <input type="hidden" name="photo" value={{photo.pk}}>
             <a href="/photos/photo"><button type="submit" onclick="clearCookie()">{{photo}}</button></a>
-        </form>
+        </form> -->
+        <a href="/photos/{{photo.hashid}}"><button type="submit" onclick="clearCookie()">{{photo}}</button></a>
 
         <!-- <li><a href="/photos/{{ photo.id }}/">{{ photo.photo_title }}</a></li> -->
     {% endfor %}

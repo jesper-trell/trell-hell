@@ -2,7 +2,7 @@ from django.http import Http404
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import User, Photo
+from .models import Photo
 
 
 def index(request):
@@ -13,12 +13,11 @@ def index(request):
     return render(request, 'photos/index.html', context)
 
 
-def photo(request):
-
-    key = int(request.POST.get('photo'))
-    photo = Photo.objects.get(pk=key)
+def photo(request, photo_hashid):
+    photo = Photo.objects.get(hashid=photo_hashid)
 
     context = {
-        'photo': photo,}
+        'photo': photo,
+        }
     
     return render(request, 'photos/photo.html', context)
