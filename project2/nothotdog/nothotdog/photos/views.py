@@ -1,8 +1,10 @@
 from django.http import Http404
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.utils import timezone
 
 from .models import Photo
+from .forms import *
 
 
 def index(request):
@@ -21,3 +23,20 @@ def photo(request, photo_hashid):
         }
     
     return render(request, 'photos/photo.html', context)
+
+def upload(request): 
+    if request.method == 'POST': 
+        form = UploadForm(request.POST, request.FILES) 
+  
+        if form.is_valid(): 
+            form = form.save(commit=False)
+            form.pub_date = timezone.now()
+            form.save() 
+            return redirect('success') 
+    else: 
+        form = UploadForm() 
+    return render(request, 'photos/upload.html', {'form' : form}) 
+  
+  
+def success(request): 
+    return HttpResponse('Successfully uploaded')

@@ -1,14 +1,11 @@
 {% if photos_list %}
     <ul>
     {% for photo in photos_list %}
-        <!-- <form action="/photos/photo" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="photo" value={{photo.pk}}>
-            <a href="/photos/photo"><button type="submit" onclick="clearCookie()">{{photo}}</button></a>
-        </form> -->
-        <a href="/photos/{{photo.hashid}}"><button type="submit" onclick="clearCookie()">{{photo}}</button></a>
-
-        <!-- <li><a href="/photos/{{ photo.id }}/">{{ photo.photo_title }}</a></li> -->
+        <!-- <a href="/photos/{{photo.hashid}}"><button type="submit" onclick="clearCookie()">{{photo}}</button></a> -->
+        <img src="{{ photo.image.url }}" alt="{{ photo.hashid }}">
+        <br>
+        <a href="/photos/{{photo.hashid}}" style='font-size:30px'>{{ photo.photo_title }}</a>
+        <!-- <p><b style='font-size:30px'>{{ photo.photo_title }}</p> -->
     {% endfor %}
     </ul>
 {% else %}

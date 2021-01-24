@@ -1,8 +1,7 @@
 {% load static %}
 
 
-<p>(Photo goes here)</p>
-<img src="../../../assets/images/photo1.png" alt="{{photo.photo_hashid}}">
+<img src="{{ photo.image.url }}" alt="{{ photo.hashid }}">
 
 <p><b style='font-size:30px'>Title: {{ photo.photo_title }}</b><br>Description: {{ photo.photo_description }}</p>
 
