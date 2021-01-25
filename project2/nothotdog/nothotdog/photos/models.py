@@ -8,8 +8,8 @@ from django_hashids import HashidsField
 
 class Photo(models.Model):
     image = models.ImageField(upload_to='images/')
-    photo_title = models.CharField(max_length=160)
-    photo_description = models.CharField(max_length=160)
+    photo_title = models.CharField(max_length=160,)
+    photo_description = models.CharField(max_length=160, blank=True)
     pub_date = models.DateTimeField('Date published')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     hashid = HashidsField(real_field_name="id", 

@@ -1,0 +1,11 @@
+{% extends 'photos/base.html' %}
+
+{% block content %}
+
+<form action="/photos">
+    <label for="fname">Description:</label>
+    <input type="text" id="fname" name="fname"><br><br>
+    <input type="submit" value="Submit">
+  </form>
+
+{% endblock %}

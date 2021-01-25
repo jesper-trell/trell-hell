@@ -1,6 +1,9 @@
-from django import forms 
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
 from .models import *
-  
+
+
 class UploadForm(forms.ModelForm): 
   
     class Meta: 
@@ -8,5 +11,10 @@ class UploadForm(forms.ModelForm):
         fields = ['image',
                   'photo_title',
                   'photo_description',
-                  'user',
                   ]
+
+
+class CustomUserCreationForm(UserCreationForm):
+    
+    class Meta(UserCreationForm.Meta):
+        fields = UserCreationForm.Meta.fields + ("email",) 
