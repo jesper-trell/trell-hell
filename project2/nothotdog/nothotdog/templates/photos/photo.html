@@ -7,15 +7,12 @@
 
 <img src="{{ photo.image.url }}" alt="{{ photo.hashid }}" style="width:600px;height:400px;">
 
+<p>Uploaded by: {{photo.user}}<p>
+
 <p><b style='font-size:30px'>{{ photo.photo_title }}</b><br>{{ photo.photo_description }}</p>
 
-<p>User: {{photo.user}}<p>
-
 {% if user == photo.user %}
-    <form method = "post"> 
-        {% csrf_token %} 
-    <button type="submit">Edit</button> 
-</form> 
+    <a href="{% url 'edit' photo.hashid %}">Edit description</a>
 {% endif%}
 
 {% endblock %}

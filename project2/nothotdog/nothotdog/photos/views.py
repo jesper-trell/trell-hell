@@ -10,7 +10,8 @@ from .models import Photo
 class IndexView(generic.ListView):
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
-
+    paginate_by = 2
+    
     def get_queryset(self):
         return Photo.objects.order_by('-pub_date')[:]
 
@@ -39,7 +40,7 @@ def upload(request):
     if request.method == 'POST': 
         form = UploadForm(request.POST, request.FILES) 
   
-        if form.is_valid(): 
+        if form.is_valid():
             form = form.save(commit=False)
             form.pub_date = timezone.now()
             form.user = request.user
@@ -70,21 +71,20 @@ def register(request):
             login(request, user)
             return redirect(reverse("index"))
 
-# def edit(request, product_id):
-#     product = ProductModel.objects.get(id=product_id)
 
-#     if(request.method == "POST"):
-#         form = ProductForm(request.POST, instance=product)
+def edit(request, photo_hashid):
+    photo = Photo.objects.get(hashid=photo_hashid)
+    if request.method == 'POST': 
+        form = EditForm(request.POST, request.FILES, instance=photo) 
+        if form.is_valid(): 
+            form.save()
+            return redirect('/photos/' + photo_hashid)
+    else: 
+        form = EditForm(instance=photo) 
 
-#         if(form.is_valid):
-#             form.save()
-#             return redirect("/")
-
-#     else:
-#         form = ProductForm()
-
-#     template_name = "products/edit.html"
-#     context = {
-#         "ProductForm":ProductForm,
-#         "ProductModel":ProductModel.objects.get(id=product_id),
-# }
+    context = {
+        'photo': photo,
+        'form': form,
+        }
+    
+    return render(request, 'photos/edit.html', context)

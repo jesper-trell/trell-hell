@@ -2,10 +2,15 @@
 
 {% block content %}
 
-<form action="/photos">
-    <label for="fname">Description:</label>
-    <input type="text" id="fname" name="fname"><br><br>
-    <input type="submit" value="Submit">
-  </form>
+
+<img src="{{ photo.image.url }}" alt="{{ photo.hashid }}" style="width:600px;height:400px;">
+
+<p><b style='font-size:30px'>{{ photo.photo_title }}</b><br>{{ photo.photo_description }}</p>
+
+<form method="post">
+    {% csrf_token %} 
+    {{ form.as_p }} 
+    <button type="submit">Edit</button> 
+</form>
 
 {% endblock %}

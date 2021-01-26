@@ -14,7 +14,16 @@ class UploadForm(forms.ModelForm):
                   ]
 
 
+class EditForm(forms.ModelForm): 
+  
+    class Meta: 
+        model = Photo 
+        fields = [
+                  'photo_description',
+                  ]
+
+
 class CustomUserCreationForm(UserCreationForm):
-    
+
     class Meta(UserCreationForm.Meta):
         fields = UserCreationForm.Meta.fields + ("email",) 

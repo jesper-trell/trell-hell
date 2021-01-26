@@ -41,3 +41,51 @@ color: white;
 .topnav-right {
 float: right;
 }
+
+a {
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  z-index: 1;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: .07em;
+  height: .1em;
+  width: 100%;
+  background: linear-gradient(110deg, #e1f549, #29d0be, #6cb8ea, #ff5959);
+  z-index: -1;
+  transition: height .25s cubic-bezier(.6,0,.4,1);
+}
+
+a:hover::after {
+  height: .2em;
+}
+
+// @media (max-width: 1199px) {
+//   p {
+//     font-size: 58px;
+//   }
+// }
+
+// @media (max-width: 991px) {
+//   p {
+//     font-size: 44px;
+//   }
+// }
+
+// @media (max-width: 767px) {
+//   p {
+//     font-size: 34px;
+//   }
+// }
+
+// @media (max-width: 575px) {
+//   p {
+//     font-size: 26px;
+//   }
+// }

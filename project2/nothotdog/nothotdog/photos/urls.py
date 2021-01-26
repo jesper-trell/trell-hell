@@ -9,5 +9,6 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('profile', views.ProfileView.as_view(), name = 'profile'),
     path('upload', views.upload, name = 'upload'),
+    path('edit/<str:photo_hashid>', views.edit, name='edit'),
     path('<str:photo_hashid>', views.photo, name='photo'),
 ]
