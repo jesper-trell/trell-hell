@@ -16,13 +16,13 @@
         <img src="{% static 'images/logo.svg' %}" alt="!HotdogLogo" style="height:40px;">
         <div class="topnav-right" id="myDIV">
             <a class="btn" href="{% url 'index' %}">Photos</a>
-            <!-- <a class="btn active" href="{% url 'index' %}">Photos</a> -->
-            {% if user.is_authenticated %}
+            <!-- {% if user.is_authenticated %}
                 <a class="btn" href="{% url 'profile' %}">Profile</a>
             {% else %}
                 <a class="btn" href="{% url 'login' %}">Profile</a>
-            {% endif %}
-            
+            {% endif %} -->
+            <a class="btn" href="{% url 'profile' %}">Profile</a>
+
             <a class="btn" href="{% url 'upload' %}">Upload</a>
 
             {% if user.is_authenticated %}

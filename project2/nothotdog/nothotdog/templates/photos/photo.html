@@ -12,7 +12,7 @@
 <p><b style='font-size:30px'>{{ photo.photo_title }}</b><br>{{ photo.photo_description }}</p>
 
 {% if user == photo.user %}
-    <a href="{% url 'edit' photo.hashid %}">Edit description</a>
+    <a href='/photos/{{photo.hashid}}/edit'>Edit description</a>
 {% endif%}
 
 {% endblock %}

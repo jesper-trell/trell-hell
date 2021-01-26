@@ -4,6 +4,17 @@
 
 
 {% if photos_list %}
+    <form method="GET">
+        <select name="paginate_by" id="">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <input type="submit" value="Paginate">
+    </form>
+
     <ul>
     {% for photo in photos_list %}
         <li>
@@ -12,36 +23,27 @@
                 <figcaption><a href="{% url 'photo' photo.hashid %}" style='font-size:30px'>{{ photo.photo_title }}</a></figcaption>
             </figure>
         </li>
-    {% endfor %}    
+    {% endfor %}
     </ul>
 
     <div class="pagination">
         <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% if photos_list.has_previous %}
+                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page=1">&laquo; First</a>
+                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page={{ photos_list.previous_page_number }}">Previous</a>
             {% endif %}
-    
+
             <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                Page {{ photos_list.number }} of {{ photos_list.paginator.num_pages }}.
             </span>
-    
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+
+            {% if photos_list.has_next %}
+                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page={{ photos_list.next_page_number }}">Next</a>
+                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page={{ photos_list.paginator.num_pages }}">Last &raquo;</a>
             {% endif %}
         </span>
     </div>
 
-    <form method="GET">
-        <select name="paginate_by" id="">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="5">5</option>
-        </select>
-        <input type="submit" value="Paginate">
-    </form>
 {% else %}
     <p>No photos are available.</p>
 {% endif %}

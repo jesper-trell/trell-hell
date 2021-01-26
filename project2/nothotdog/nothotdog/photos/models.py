@@ -12,9 +12,11 @@ class Photo(models.Model):
     photo_description = models.CharField(max_length=160, blank=True)
     pub_date = models.DateTimeField('Date published')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    hashid = HashidsField(real_field_name="id", 
-                          salt="salty jesper",
-                          min_length=10)
+    hashid = HashidsField(
+                real_field_name="id",
+                salt="salty jesper",
+                min_length=10,
+            )
 
     def __str__(self):
         return self.photo_title

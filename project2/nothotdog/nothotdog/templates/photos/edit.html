@@ -8,9 +8,9 @@
 <p><b style='font-size:30px'>{{ photo.photo_title }}</b><br>{{ photo.photo_description }}</p>
 
 <form method="post">
-    {% csrf_token %} 
-    {{ form.as_p }} 
-    <button type="submit">Edit</button> 
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Edit</button>
 </form>
 
 {% endblock %}

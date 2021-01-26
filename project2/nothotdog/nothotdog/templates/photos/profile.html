@@ -7,14 +7,14 @@
     <ul>
     {% for photo in photos_list %}
         {% if user == photo.user %}
-        <li>
-            <figure>
-                <img src="{{ photo.image.url }}" alt="{{ photo.hashid }}" style="width:300px;height:200px;">
-                <figcaption><a href="{% url 'photo' photo.hashid %}" style='font-size:30px'>{{ photo.photo_title }}</a></figcaption>
-            </figure>
-        </li>
+            <li>
+                <figure>
+                    <img src="{{ photo.image.url }}" alt="{{ photo.hashid }}" style="width:300px;height:200px;">
+                    <figcaption><a href="{% url 'photo' photo.hashid %}" style='font-size:30px'>{{ photo.photo_title }}</a></figcaption>
+                </figure>
+            </li>
         {% endif %}
-    {% endfor %}    
+    {% endfor %}
     </ul>
 {% else %}
     <p>No photos are available.</p>

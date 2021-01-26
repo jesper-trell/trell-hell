@@ -156,7 +156,7 @@ COMPRESS_OFFLINE = False
 COMPRESS_OUTPUT_DIR = ''
 
 try:
-    from local_settings import *
+    from nothotdog.local_settings import *
 except ImportError:
     pass
 

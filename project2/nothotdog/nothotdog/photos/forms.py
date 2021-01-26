@@ -4,26 +4,26 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import *
 
 
-class UploadForm(forms.ModelForm): 
-  
-    class Meta: 
-        model = Photo 
+class PhotoUploadForm(forms.ModelForm):
+
+    class Meta:
+        model = Photo
         fields = ['image',
-                  'photo_title',
-                  'photo_description',
-                  ]
+            'photo_title',
+            'photo_description',
+        ]
 
 
-class EditForm(forms.ModelForm): 
-  
-    class Meta: 
-        model = Photo 
+class PhotoEditForm(forms.ModelForm):
+
+    class Meta:
+        model = Photo
         fields = [
-                  'photo_description',
-                  ]
+            'photo_description',
+        ]
 
 
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields + ("email",) 
+        fields = UserCreationForm.Meta.fields + ("email",)
