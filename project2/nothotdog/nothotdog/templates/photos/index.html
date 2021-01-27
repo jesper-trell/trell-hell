@@ -9,8 +9,9 @@
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
         </select>
         <input type="submit" value="Paginate">
     </form>
@@ -20,7 +21,7 @@
         <li>
             <figure>
                 <img src="{{ photo.image.url }}" alt="{{ photo.hashid }}" style="width:300px;height:200px;">
-                <figcaption><a href="{% url 'photo' photo.hashid %}" style='font-size:30px'>{{ photo.photo_title }}</a></figcaption>
+                <figcaption><a href="{% url 'photo' photo.hashid %}" style='font-size:30px'>{{ photo.title }}</a></figcaption>
             </figure>
         </li>
     {% endfor %}

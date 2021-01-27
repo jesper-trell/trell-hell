@@ -1,0 +1,5 @@
+django
+django-compressor
+django-hashids
+psycopg2
+pika

@@ -5,9 +5,10 @@ from .models import Photo
 
 class PhotoAdmin(admin.ModelAdmin):
     list_display = (
-        'photo_title',
+        'title',
         'pub_date',
         'user',
+        'flagged',
     )
 
 

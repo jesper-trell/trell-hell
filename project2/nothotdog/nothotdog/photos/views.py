@@ -1,3 +1,4 @@
+import pika
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
@@ -18,7 +19,7 @@ class IndexView(generic.ListView):
 
     def get(self, request):
         paginate_by = request.GET.get('paginate_by') or self.paginate_by
-        data = self.model.objects.all()
+        data = self.model.objects.filter(flagged=False)
 
         paginator = Paginator(data, paginate_by)
         page = request.GET.get('page')
@@ -29,8 +30,22 @@ class IndexView(generic.ListView):
 
 class ProfileView(LoginRequiredMixin, generic.ListView):
     model = Photo
+    template_name = 'photos/index.html'
     context_object_name = 'photos_list'
-    template_name = 'photos/profile.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Photo.objects.filter(user=self.request.user, flagged=False)
+
+    def get(self, request):
+        paginate_by = request.GET.get('paginate_by') or self.paginate_by
+        data = self.model.objects.filter(user=self.request.user, flagged=False)
+
+        paginator = Paginator(data, paginate_by)
+        page = request.GET.get('page')
+        paginated = paginator.get_page(page)
+
+        return render(request, 'photos/index.html', {'photos_list': paginated})
 
 
 def photo(request, photo_hashid):
@@ -54,6 +69,10 @@ def upload(request):
             form.save()
 
             photo = Photo.objects.get(hashid=form.hashid)
+
+            is_hotdog = 'hotdog' in photo.title.lower()
+            if not is_hotdog:
+                send_alert_message(photo.title)
 
             context = {
                 'photo': photo,
@@ -88,5 +107,13 @@ def edit(request, photo_hashid):
     return render(request, 'photos/edit.html', context)
 
 
-def register(request):
-    pass
+def send_alert_message(message):
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(host='localhost')
+    )
+    channel = connection.channel()
+
+    channel.queue_declare(queue='hotdog_alert')
+    channel.basic_publish(exchange='', routing_key='hotdog_alert', body=message)
+    print(" [x] Image not depicting hot dog has been spotted!'")
+    connection.close()

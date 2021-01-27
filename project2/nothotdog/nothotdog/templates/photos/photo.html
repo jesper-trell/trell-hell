@@ -9,7 +9,7 @@
 
 <p>Uploaded by: {{photo.user}}<p>
 
-<p><b style='font-size:30px'>{{ photo.photo_title }}</b><br>{{ photo.photo_description }}</p>
+<p><b style='font-size:30px'>{{ photo.title }}</b><br>{{ photo.description }}</p>
 
 {% if user == photo.user %}
     <a href='/photos/{{photo.hashid}}/edit'>Edit description</a>

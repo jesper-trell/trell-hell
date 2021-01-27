@@ -8,9 +8,10 @@ class PhotoUploadForm(forms.ModelForm):
 
     class Meta:
         model = Photo
-        fields = ['image',
-            'photo_title',
-            'photo_description',
+        fields = [
+            'image',
+            'title',
+            'description',
         ]
 
 
@@ -19,7 +20,7 @@ class PhotoEditForm(forms.ModelForm):
     class Meta:
         model = Photo
         fields = [
-            'photo_description',
+            'description',
         ]
 
 
