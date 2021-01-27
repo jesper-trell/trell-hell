@@ -172,10 +172,10 @@ COMPRESS_PRECOMPILERS = (
 if not DEBUG:
     COMPRESS_OFFLINE = True
     COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'node_modules/.bin/node-sass {infile} {outfile}'),
-    ('text/jsx', 'NODE_ENV=production node_modules/.bin/browserify '
-                 '-t babelify {infile} -o {outfile}'),
-)
+        ('text/x-scss', 'node_modules/.bin/node-sass {infile} {outfile}'),
+        ('text/jsx', 'NODE_ENV=production node_modules/.bin/browserify '
+            '-t babelify {infile} -o {outfile}'),
+    )
 
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"

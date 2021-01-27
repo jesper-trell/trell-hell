@@ -1,6 +1,10 @@
 import pika, sys, os
 
-# from models import Photo
+import django
+from django.conf import settings
+from models import Photo
+# from nothotdog.photos import model
+
 
 def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
@@ -17,6 +21,7 @@ def main():
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
+
 
 if __name__ == '__main__':
     try:

@@ -1,5 +1,7 @@
 {% extends 'photos/base.html' %}
 
+{% include "pagination.html" with page=page_obj %}
+
 {% block content %}
 
 
@@ -29,18 +31,18 @@
 
     <div class="pagination">
         <span class="step-links">
-            {% if photos_list.has_previous %}
-                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page=1">&laquo; First</a>
-                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page={{ photos_list.previous_page_number }}">Previous</a>
+            {% if page_obj.has_previous %}
+                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page=1">&laquo; First</a>
+                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.previous_page_number }}">Previous</a>
             {% endif %}
 
             <span class="current">
-                Page {{ photos_list.number }} of {{ photos_list.paginator.num_pages }}.
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
             </span>
 
-            {% if photos_list.has_next %}
-                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page={{ photos_list.next_page_number }}">Next</a>
-                <a href="?paginate_by={{ photos_list.paginator.per_page }}&page={{ photos_list.paginator.num_pages }}">Last &raquo;</a>
+            {% if page_obj.has_next %}
+                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.next_page_number }}">Next</a>
+                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
             {% endif %}
         </span>
     </div>
