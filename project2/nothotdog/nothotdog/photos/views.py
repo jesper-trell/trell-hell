@@ -1,7 +1,6 @@
 import pika
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import generic
@@ -58,7 +57,7 @@ def upload(request):
 
             is_hotdog = 'hotdog' in photo.title.lower()
             if not is_hotdog:
-                send_alert_message(photo.title)
+                send_alert_message(photo.hashid)
 
             context = {
                 'photo': photo,
@@ -101,6 +100,12 @@ def send_alert_message(message):
 
     channel.queue_declare(queue='hotdog_alert')
     channel.basic_publish(
-        exchange='', routing_key='hotdog_alert', body=message)
+        exchange='',
+        routing_key='hotdog_alert',
+        body=message,
+        properties=pika.BasicProperties(
+            delivery_mode=2,  # Make message persistent.
+        )
+    )
     print(" [x] Image not depicting hot dog has been spotted!'")
     connection.close()
