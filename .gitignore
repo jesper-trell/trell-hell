@@ -9,12 +9,12 @@ project2/nothotdog/static
 project2/nothotdog/db.sqlite3
 project2/nothotdog/node_modules
 
-project2/nothotdog/local_settings.py
 project2/nothotdog/.module-cache
 project2/nothotdog/.sass-cache
 project2/nothotdog/.tmp
 project2/nothotdog/.DS_Store
 project2/nothotdog/__pycache__
+project2/nothotdog/nothotdog/local_settings.py
 
 *.py[co]
 *.pyc

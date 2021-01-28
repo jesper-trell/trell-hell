@@ -17,29 +17,29 @@ ul li{
 
 /* Style the links inside the navigation bar */
 .topnav a {
-float: left;
-color: #f2f2f2;
-text-align: center;
-padding: 14px 16px;
-text-decoration: none;
-font-size: 17px;
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-background-color: #ddd;
-color: black;
+  background-color: #ddd;
+  color: black;
 }
 
 /* Add a color to the active/current link */
 .topnav a.active {
-background-color: #4CAF50;
-color: white;
+  background-color: #4CAF50;
+  color: white;
 }
 
 /* Right-aligned section inside the top navigation */
 .topnav-right {
-float: right;
+  float: right;
 }
 
 a {
@@ -65,27 +65,3 @@ a::after {
 a:hover::after {
   height: .2em;
 }
-
-// @media (max-width: 1199px) {
-//   p {
-//     font-size: 58px;
-//   }
-// }
-
-// @media (max-width: 991px) {
-//   p {
-//     font-size: 44px;
-//   }
-// }
-
-// @media (max-width: 767px) {
-//   p {
-//     font-size: 34px;
-//   }
-// }
-
-// @media (max-width: 575px) {
-//   p {
-//     font-size: 26px;
-//   }
-// }

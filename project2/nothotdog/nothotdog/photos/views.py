@@ -14,32 +14,29 @@ class ConfigurablePaginationMixin:
         return self.request.GET.get('paginate_by') or self.paginate_by
 
 
-class IndexView(generic.ListView, ConfigurablePaginationMixin):
+class IndexView(ConfigurablePaginationMixin, generic.ListView):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
-    queryset = model.objects.filter(flagged=False)
+    queryset = model.objects.filter(flagged=False).order_by('-pub_date')
     paginate_by = 20
 
 
-class ProfileView(LoginRequiredMixin, generic.ListView, ConfigurablePaginationMixin):
+class ProfileView(ConfigurablePaginationMixin, LoginRequiredMixin, generic.ListView):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
     paginate_by = 20
 
     def get_queryset(self):
-        return self.model.objects.filter(flagged=False, user=self.request.user)
+        return self.model.objects.filter(flagged=False, user=self.request.user).order_by('-pub_date')
 
 
 def photo(request, photo_hashid):
     photo = Photo.objects.get(hashid=photo_hashid)
+    print(photo)
 
-    context = {
-        'photo': photo,
-    }
-
-    return render(request, 'photos/photo.html', context)
+    return render(request, 'photos/photo.html', {'photo': photo})
 
 
 @login_required
@@ -53,17 +50,11 @@ def upload(request):
             photo.user = request.user
             photo.save()
 
-            # photo = Photo.objects.get(hashid=form.hashid)
-
             is_hotdog = 'hotdog' in photo.title.lower()
             if not is_hotdog:
                 send_alert_message(photo.hashid)
 
-            context = {
-                'photo': photo,
-            }
-
-            return render(request, 'photos/photo.html', context)
+            return render(request, 'photos/photo.html', {'photo': photo})
     else:
         form = PhotoUploadForm()
     return render(request, 'photos/upload.html', {'form': form})
