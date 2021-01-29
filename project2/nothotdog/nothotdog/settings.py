@@ -177,7 +177,7 @@ if not DEBUG:
             '-t babelify {infile} -o {outfile}'),
     )
 
-LOGIN_REDIRECT_URL = "index"
-LOGOUT_REDIRECT_URL = "index"
+LOGIN_REDIRECT_URL = "photos:index"
+LOGOUT_REDIRECT_URL = "photos:index"
 
 RABBITMQ_HOST = "localhost"

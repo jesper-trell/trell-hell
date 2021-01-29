@@ -37,4 +37,4 @@ def generate_data():
     significand_temp = round(rand_temp * 10**2)
     significand_humid = round(rand_humid * 10**2)
 
-    return (significand_temp, significand_humid,)
+    return (significand_temp, significand_humid)

@@ -1,3 +1,6 @@
+import struct
+import time
+
 import pika
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -16,14 +19,16 @@ class Command(BaseCommand):
         channel.queue_declare(queue='hotdog_alert')
 
         def callback(ch, method, properties, body):
-            photo = Photo.objects.get(hashid=body.decode("utf-8"))
-            print(f" [x] Received {photo}")
+            photo_id, created = struct.unpack("i?", body)
+            time.sleep(1)
+            photo = Photo.objects.get(id=photo_id)
+            print(f" [x] Processing {photo}.")
 
             is_hotdog = 'hotdog' in photo.title.lower()
-            if not is_hotdog:
+            if not is_hotdog and created:
                 photo.flagged = True
                 photo.save()
-                print(f" [x] Flagged {photo}")
+                print(f" [x] Flagged {photo}.")
 
         channel.basic_consume(
             queue='hotdog_alert',

@@ -1,7 +1,11 @@
+import struct
+
 import pika
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import generic
@@ -42,10 +46,8 @@ class ProfileView(ConfigurablePaginationMixin, LoginRequiredMixin, generic.ListV
         return self.model.objects.filter(flagged=False, user=self.request.user).order_by('-pub_date')
 
 
-def photo(request, photo_hashid):
-    photo = Photo.objects.get(hashid=photo_hashid)
-    print(photo)
-
+def photo(request, photo_uu_id):
+    photo = Photo.objects.get(uu_id=photo_uu_id)
     return render(request, 'photos/photo.html', {'photo': photo})
 
 
@@ -60,8 +62,6 @@ def upload(request):
             photo.user = request.user
             photo.save()
 
-            send_alert_message(photo.hashid)
-
             return render(request, 'photos/photo.html', {'photo': photo})
     else:
         form = PhotoUploadForm()
@@ -69,17 +69,17 @@ def upload(request):
 
 
 @login_required
-def edit(request, photo_hashid):
-    photo = Photo.objects.get(hashid=photo_hashid)
+def edit(request, photo_uu_id):
+    photo = Photo.objects.get(uu_id=photo_uu_id)
 
     if request.user != photo.user:
-        return redirect('photo', photo_hashid=photo_hashid)
+        return redirect('photos:photo', photo_uu_id=photo_uu_id)
 
     if request.method == 'POST':
         form = PhotoEditForm(request.POST, request.FILES, instance=photo)
         if form.is_valid():
             form.save()
-            return redirect('photo', photo_hashid=photo_hashid)
+            return redirect('photos:photo', photo_uu_id=photo_uu_id)
     else:
         form = PhotoEditForm(instance=photo)
 
@@ -91,7 +91,7 @@ def edit(request, photo_hashid):
     return render(request, 'photos/edit.html', context)
 
 
-def send_alert_message(message):
+def send_photo_alert(message):
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host=settings.RABBITMQ_HOST)
     )
@@ -106,5 +106,11 @@ def send_alert_message(message):
             delivery_mode=2,  # Make message persistent.
         )
     )
-    print(" [x] Image not depicting hot dog has been spotted!'")
     connection.close()
+
+
+@receiver(post_save)
+def callback(sender, instance, created, update_fields, **kwargs):
+    if isinstance(instance, Photo):
+        packed_data = struct.pack("i?", instance.id, created)
+        send_photo_alert(packed_data)

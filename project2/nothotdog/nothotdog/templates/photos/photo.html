@@ -7,14 +7,14 @@
 {% block content %}
 
 
-<img src="{{ photo.image.url }}" alt="{{ photo.hashid }}" style="width:600px;height:400px;">
+<img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
 
 <p>Uploaded by: {{photo.user}}<p>
 
 <p><b style='font-size:30px'>{{ photo.title }}</b><br>{{ photo.description }}</p>
 
 {% if user == photo.user %}
-    <a href="{% url 'photos:edit' photo.hashid %}">Edit description</a>
+    <a href="{% url 'photos:edit' photo.uu_id %}">Edit description</a>
 {% endif%}
 
 {% endblock %}e

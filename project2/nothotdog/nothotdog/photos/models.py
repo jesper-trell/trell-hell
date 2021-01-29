@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
-from django_hashids import HashidsField
+import uuid
 
 
 class Photo(models.Model):
@@ -13,12 +13,7 @@ class Photo(models.Model):
     pub_date = models.DateTimeField('Date published')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flagged = models.BooleanField(default=False)
-    hashid = HashidsField(
-                real_field_name="id",
-                salt="salty jesper",
-                min_length=10,
-                editable=False,
-            )
+    uu_id = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.title

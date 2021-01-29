@@ -9,6 +9,6 @@ urlpatterns = [
     path('photos', views.IndexView.as_view(), name='index'),
     path('profile', views.ProfileView.as_view(), name='profile'),
     path('upload', views.upload, name='upload'),
-    path('<str:photo_hashid>', views.photo, name='photo'),
-    path('<str:photo_hashid>/edit', views.edit, name='edit'),
+    path('<str:photo_uu_id>', views.photo, name='photo'),
+    path('<str:photo_uu_id>/edit', views.edit, name='edit'),
 ]
