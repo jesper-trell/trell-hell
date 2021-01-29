@@ -179,3 +179,5 @@ if not DEBUG:
 
 LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
+
+RABBITMQ_HOST = "localhost"

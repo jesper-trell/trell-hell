@@ -9,10 +9,11 @@ ul li{
     display:inline-block;
 }
 
-/* Add a black background color to the top navigation */
+/* Add a background color to the top navigation */
 .topnav {
-    background-color: #333;
+    background-color: #0b193c;
     overflow: hidden;
+    position: relative;
   }
 
 /* Style the links inside the navigation bar */
@@ -22,20 +23,24 @@ ul li{
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  padding: 0px 10px;
 }
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: #23376b;
 }
 
-/* Add a color to the active/current link */
-.topnav a.active {
-  background-color: #4CAF50;
-  color: white;
-}
 
 /* Right-aligned section inside the top navigation */
 .topnav-right {
@@ -50,18 +55,18 @@ a {
   z-index: 1;
 }
 
-a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: .07em;
-  height: .1em;
-  width: 100%;
-  background: linear-gradient(110deg, #e1f549, #29d0be, #6cb8ea, #ff5959);
-  z-index: -1;
-  transition: height .25s cubic-bezier(.6,0,.4,1);
+.index .index-btn {
+  color: #0ccfff;
 }
 
-a:hover::after {
-  height: .2em;
+.index .profile-btn {
+  color: #0ccfff;
+}
+
+.upload .upload-btn {
+  color: #0ccfff;
+}
+
+.login .login-btn {
+  color: #0ccfff;
 }

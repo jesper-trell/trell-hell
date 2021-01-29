@@ -1,4 +1,5 @@
 import pika
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
@@ -14,7 +15,16 @@ class ConfigurablePaginationMixin:
         return self.request.GET.get('paginate_by') or self.paginate_by
 
 
-class IndexView(ConfigurablePaginationMixin, generic.ListView):
+class ExtraContext(object):
+    extra_context = {'index_view': True}
+
+    def get_context_data(self, **kwargs):
+        context = super(ExtraContext, self).get_context_data(**kwargs)
+        context.update(self.extra_context)
+        return context
+
+
+class IndexView(ExtraContext, ConfigurablePaginationMixin, generic.ListView):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
@@ -50,9 +60,7 @@ def upload(request):
             photo.user = request.user
             photo.save()
 
-            is_hotdog = 'hotdog' in photo.title.lower()
-            if not is_hotdog:
-                send_alert_message(photo.hashid)
+            send_alert_message(photo.hashid)
 
             return render(request, 'photos/photo.html', {'photo': photo})
     else:
@@ -65,13 +73,13 @@ def edit(request, photo_hashid):
     photo = Photo.objects.get(hashid=photo_hashid)
 
     if request.user != photo.user:
-        return redirect('/photos/' + photo_hashid)
+        return redirect('photo', photo_hashid=photo_hashid)
 
     if request.method == 'POST':
         form = PhotoEditForm(request.POST, request.FILES, instance=photo)
         if form.is_valid():
             form.save()
-            return redirect('/photos/' + photo_hashid)
+            return redirect('photo', photo_hashid=photo_hashid)
     else:
         form = PhotoEditForm(instance=photo)
 
@@ -85,7 +93,7 @@ def edit(request, photo_hashid):
 
 def send_alert_message(message):
     connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='localhost')
+        pika.ConnectionParameters(host=settings.RABBITMQ_HOST)
     )
     channel = connection.channel()
 
