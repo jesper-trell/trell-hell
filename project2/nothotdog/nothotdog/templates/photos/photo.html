@@ -14,7 +14,7 @@
 <p><b style='font-size:30px'>{{ photo.title }}</b><br>{{ photo.description }}</p>
 
 {% if user == photo.user %}
-    <a href="{% url 'edit' photo.hashid %}">Edit description</a>
+    <a href="{% url 'photos:edit' photo.hashid %}">Edit description</a>
 {% endif%}
 
 {% endblock %}e

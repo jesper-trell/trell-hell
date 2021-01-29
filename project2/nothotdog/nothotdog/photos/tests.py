@@ -6,7 +6,11 @@ from nothotdog.photos.models import Photo
 
 class PhotoTestCase(TestCase):
     def setUp(self):
-        test_user = User.objects.create_user('test_user', 'test_user@test.com', 'pass')
+        test_user = User.objects.create_user(
+            'test_user',
+            'test_user@test.com',
+            'pass'
+        )
         Photo.objects.create(
             # image=,
             title="title",

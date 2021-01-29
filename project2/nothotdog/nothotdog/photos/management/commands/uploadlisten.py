@@ -8,7 +8,9 @@ class Command(BaseCommand):
     help = 'Listens to detect uploads made to the server.'
 
     def handle(self, *args, **options):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
+        connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=settings.RABBITMQ_HOST)
+        )
         channel = connection.channel()
 
         channel.queue_declare(queue='hotdog_alert')
@@ -23,7 +25,11 @@ class Command(BaseCommand):
                 photo.save()
                 print(f" [x] Flagged {photo}")
 
-        channel.basic_consume(queue='hotdog_alert', on_message_callback=callback, auto_ack=True)
+        channel.basic_consume(
+            queue='hotdog_alert',
+            on_message_callback=callback,
+            auto_ack=True,
+        )
 
         print(' [*] Waiting for messages. To exit press CTRL+C')
         channel.start_consuming()
