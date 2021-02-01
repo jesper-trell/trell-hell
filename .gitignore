@@ -3,6 +3,7 @@
 __pycache__/
 .pytest_cache/
 .vscode/
+hotdog/
 
 .module-cache
 .sass-cache
