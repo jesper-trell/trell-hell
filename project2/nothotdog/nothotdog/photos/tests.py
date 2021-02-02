@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
-from nothotdog.photos.models import Photo
+from .models import Photo
 
 
 class PhotoTestCase(TestCase):
