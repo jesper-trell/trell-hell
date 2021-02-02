@@ -36,14 +36,21 @@ class IndexView(ExtraContext, ConfigurablePaginationMixin, generic.ListView):
     paginate_by = 20
 
 
-class ProfileView(ConfigurablePaginationMixin, LoginRequiredMixin, generic.ListView):
+class ProfileView(
+    ConfigurablePaginationMixin,
+    LoginRequiredMixin,
+    generic.ListView
+):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
     paginate_by = 20
 
     def get_queryset(self):
-        return self.model.objects.filter(flagged=False, user=self.request.user).order_by('-pub_date')
+        return self.model.objects.filter(
+            flagged=False,
+            user=self.request.user,
+        ).order_by('-pub_date')
 
 
 def photo(request, photo_uu_id):
@@ -109,8 +116,9 @@ def send_photo_alert(message):
     connection.close()
 
 
-@receiver(post_save)
-def callback(sender, instance, created, update_fields, **kwargs):
-    if isinstance(instance, Photo):
-        packed_data = struct.pack("i?", instance.id, created)
-        send_photo_alert(packed_data)
+@receiver(post_save, sender=Photo)
+def callback(sender, instance, created, **kwargs):
+    # Do nothing if there was no new upload.
+    if created:
+        bytes_data = (instance.id).to_bytes(2, byteorder='big')
+        send_photo_alert(bytes_data)

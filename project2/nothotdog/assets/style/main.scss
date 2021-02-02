@@ -1,17 +1,28 @@
+:root {
+  --nothotdog_blue: #0ccfff;
+  --topbar_color: #0b193c;
+  --topbar_selected_color: #23376b;
+}
+
+* {
+	// font-family: verdana;
+}
+
 label, input {
     display: block;
 }
+
 span.helptext {
     display: none;
 }
 
-ul li{
+ul li {
     display:inline-block;
 }
 
 /* Add a background color to the top navigation */
 .topnav {
-    background-color: #0b193c;
+    background-color: var(--topbar_color);
     overflow: hidden;
     position: relative;
   }
@@ -19,7 +30,7 @@ ul li{
 /* Style the links inside the navigation bar */
 .topnav a {
   float: left;
-  color: #f2f2f2;
+  color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -38,9 +49,8 @@ ul li{
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #23376b;
+  background-color: var(--topbar_selected_color);
 }
-
 
 /* Right-aligned section inside the top navigation */
 .topnav-right {
@@ -56,17 +66,76 @@ a {
 }
 
 .index .index-btn {
-  color: #0ccfff;
+  color: var(--nothotdog_blue);
 }
 
 .index .profile-btn {
-  color: #0ccfff;
+  color: var(--nothotdog_blue);
 }
 
 .upload .upload-btn {
-  color: #0ccfff;
+  color: var(--nothotdog_blue);
 }
 
 .login .login-btn {
-  color: #0ccfff;
+  color: var(--nothotdog_blue);
+}
+
+.page-container {
+  display: block;
+  width: 86%;
+  margin: 0 auto;
+}
+
+.title-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.page-title {
+  float: left;
+  font-size: 25px;
+}
+
+.pagination-container {
+  overflow: hidden;
+  position: relative;
+  margin: 10px auto;
+}
+
+.pagination-links {
+  font-weight: 700
+}
+
+// .page-container input {
+//   margin: 10px auto;
+//   display: block;
+// }
+
+.image-label {
+  font-size: 20px;
+}
+
+.edit-button {
+  background-color: var(--nothotdog_blue);
+  color: white;
+  border: none;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+img {
+  border-radius: 2%;
+}
+
+figure {
+  // border: 1px #cccccc solid;
+  padding: 0px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  margin: auto;
 }

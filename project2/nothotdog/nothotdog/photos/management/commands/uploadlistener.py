@@ -23,18 +23,13 @@ class Command(BaseCommand):
         channel.queue_declare(queue='hotdog_alert')
 
         def callback(ch, method, properties, body):
-            photo_id, created = struct.unpack("i?", body)
-
-            # Do nothing if there was no new upload.
-            if not created:
-                return
+            photo_id = int.from_bytes(body, byteorder='big')
 
             # Give time for database to update before accessing.
             time.sleep(1)
             photo = Photo.objects.get(id=photo_id)
             print(f" [x] Processing {photo}.")
 
-            # is_hotdog = 'hotdog' in photo.title.lower()
             prediction, is_hotdog = process_image(photo)
             hotdog_probability = round(prediction[1] * 100, 1)
             if not is_hotdog:

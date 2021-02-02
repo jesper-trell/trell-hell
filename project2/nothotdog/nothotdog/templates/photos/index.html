@@ -4,51 +4,65 @@
 
 {% block content %}
 
-
-{% if photos_list %}
-    <form method="GET">
-        <select name="paginate_by" id="">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-        </select>
-        <input type="submit" value="Paginate">
-    </form>
-
-    <ul>
-        {% for photo in photos_list %}
-            <li>
-                <figure>
-                    <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:300px;height:200px;">
-                    <figcaption><a href="{% url 'photos:photo' photo.uu_id %}" style='font-size:30px'>{{ photo.title }}</a></figcaption>
-                </figure>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page=1">&laquo; First</a>
-                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.previous_page_number }}">Previous</a>
-            {% endif %}
-
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
-
-            {% if page_obj.has_next %}
-                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.next_page_number }}">Next</a>
-                <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-            {% endif %}
-        </span>
+<div class="page-container">
+    <div class="title-container">
+        <div class="page-title">
+        {% if user.username and index_view %}
+            <p><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> Photos</p>
+        {% elif user.username %}
+            <p><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> Profile</p>
+        {% else %}
+            <p><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> Photos</p>
+        {% endif %}
+        </div>
     </div>
 
-{% else %}
-    <p>No photos are available.</p>
-{% endif %}
+    <div class="photos-container">
+        {% if photos_list %}
+            <div style="display:block;">
+                {% for photo in photos_list %}
+                    <div style="display:inline-block;">
+                        <figure>
+                            <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:300px;height:200px;">
+                            <figcaption class="image-label"><a href="{% url 'photos:photo' photo.uu_id %}">{{ photo.title }}</a></figcaption>
+                        </figure>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="pagination-container">
+                <form method="GET">
+                    <select name="paginate_by">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                    <input type="submit" value="Paginate">
+                </form>
+
+                <span class="pagination-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page=1">&laquo; First</a>
+                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+                </span>
+
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+
+                <span class="pagination-links">
+                    {% if page_obj.has_next %}
+                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.next_page_number }}">Next</a>
+                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            <p>No photos are available.</p>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock %}

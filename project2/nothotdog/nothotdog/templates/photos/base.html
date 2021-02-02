@@ -14,8 +14,7 @@
 
     <div class="topnav">
         <img src="{% static 'images/logo.svg' %}" alt="!HotdogLogo" style="height:35px;" class="vertical-center">
-        <div class="topnav-right" id="myDIV">
-
+        <div class="topnav-right">
             {% if index_view %}
                 <a class="btn index-btn" href="{% url 'photos:index' %}">Photos</a>
                 <a class="btn" href="{% url 'photos:profile' %}">Profile</a>
@@ -33,14 +32,6 @@
             {% endif %}
         </div>
     </div>
-
-    {% if user.username %}
-        You are logged in as user <b>{{ user.username }}</b>.
-    {% else %}
-        You are visiting the site as a <b>guest</b>.
-    {% endif %}
-
-    <hr>
 
     <body class="{% block bodyclass %}{% endblock %}">
         {% block content %}
