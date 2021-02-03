@@ -6,25 +6,27 @@
 
 {% block content %}
 
-<div style="width:100%;text-align: center;">
-{% if user.username %}
-    <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
-{% elif user.username %}
-    <p class="page-title"><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> "{{ photo.title }}"</p>
-{% endif %}
 
-{% if user == photo.user %}
-    <a href="{% url 'photos:edit' photo.uu_id %}" class="edit-button" style="display:inline-block;">Edit</a>
-{% endif%}
+<div class="page-container-photo">
+    <div class="title-container">
+        {% if user.username %}
+            <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
+        {% else %}
+            <p class="page-title"><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> {{ photo.title }}</p>
+        {% endif %}
+
+        {% if user == photo.user %}
+            <a href="{% url 'photos:edit' photo.uu_id %}" class="edit-button">Edit</a>
+        {% endif%}
+    </div>
+
+    <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
+
+
+    <div class="title-container">
+        <span class="description">{{ photo.description}}</span>
+        <span class="upload_user">Uploaded by: {{photo.user}}</span>
+    </div>
 </div>
-
-
-<img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
-
-<p>Uploaded by: {{photo.user}}<p>
-
-<p style='font-size:30px'>{{ photo.description}}</p>
-
-{% comment %} <p><b style='font-size:30px'>{{ photo.title }}</b><br>{{ photo.description }}</p> {% endcomment %}
 
 {% endblock %}

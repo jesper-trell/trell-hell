@@ -5,14 +5,22 @@
 {% block content %}
 
 
-<img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
+<div class="page-container-photo">
+    <div class="title-container">
+        {% if user.username %}
+            <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
+        {% elif user.username %}
+            <p class="page-title"><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> "{{ photo.title }}"</p>
+        {% endif %}
+    </div>
 
-<p><b style='font-size:30px'>{{ photo.title }}</b><br>{{ photo.description }}</p>
+    <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Edit</button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Edit</button>
+    </form>
+</div>
 
 {% endblock %}

@@ -22,14 +22,13 @@ ul li {
 
 /* Add a background color to the top navigation */
 .topnav {
-    background-color: var(--topbar_color);
-    overflow: hidden;
-    position: relative;
+  background-color: var(--topbar_color);
+  overflow: hidden;
+  position: relative;
   }
 
 /* Style the links inside the navigation bar */
 .topnav a {
-  float: left;
   color: white;
   text-align: center;
   padding: 14px 16px;
@@ -55,6 +54,30 @@ ul li {
 /* Right-aligned section inside the top navigation */
 .topnav-right {
   float: right;
+}
+
+.edit-button {
+  padding: 5px;
+  text-decoration: none;
+  font-size: 20px;
+  background-color: var(--nothotdog_blue);
+  color: white;
+  border: none;
+  margin: 4px 2px;
+  position: absolute;
+  right: 1%;
+  top: 27%;
+}
+
+.upload_user {
+  position: absolute;
+  right: 1%;
+}
+
+.description {
+  display: inline-block;
+  width: 400px;
+  font-weight: bold;
 }
 
 a {
@@ -87,9 +110,16 @@ a {
   margin: 0 auto;
 }
 
+.page-container-photo {
+  display: block;
+  width: 40%;
+  margin: 0 auto;
+}
+
 .title-container {
   overflow: hidden;
   position: relative;
+  // border: 1px #cccccc solid;
 }
 
 .page-title {
@@ -116,24 +146,11 @@ a {
   font-size: 20px;
 }
 
-.edit-button {
-  background-color: var(--nothotdog_blue);
-  color: white;
-  border: none;
-  padding: 5px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-}
-
 img {
   border-radius: 2%;
 }
 
 figure {
-  // border: 1px #cccccc solid;
   padding: 0px;
   padding-right: 20px;
   padding-bottom: 20px;

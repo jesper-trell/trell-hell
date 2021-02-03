@@ -3,3 +3,8 @@ django-compressor
 django-hashids
 psycopg2
 pika
+scikit-image
+scikit-learn
+tensorflow
+keras
+opencv
