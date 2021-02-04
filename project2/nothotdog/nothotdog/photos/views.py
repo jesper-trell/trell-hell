@@ -1,10 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
-from django.views import generic
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.list import ListView
 
-from .forms import PhotoEditForm, PhotoUploadForm
 from .models import Photo
 
 
@@ -22,7 +22,7 @@ class ExtraContext(object):
         return context
 
 
-class IndexView(ExtraContext, ConfigurablePaginationMixin, generic.ListView):
+class IndexView(ExtraContext, ConfigurablePaginationMixin, ListView):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
@@ -33,7 +33,7 @@ class IndexView(ExtraContext, ConfigurablePaginationMixin, generic.ListView):
 class ProfileView(
     ConfigurablePaginationMixin,
     LoginRequiredMixin,
-    generic.ListView
+    ListView
 ):
     model = Photo
     template_name = 'photos/index.html'
@@ -44,49 +44,52 @@ class ProfileView(
         return self.model.objects.filter(
             flagged=False,
             user=self.request.user,
-        ).order_by('-pub_date')
+            ).order_by('-pub_date')
 
 
-def photo(request, photo_uu_id):
-    photo = Photo.objects.get(uu_id=photo_uu_id)
-    return render(request, 'photos/photo.html', {'photo': photo})
+class PhotoView(TemplateView):
+    template_name = 'photos/photo.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+        context['photo'] = photo
+        return context
 
 
-@login_required
-def upload(request):
-    if request.method == 'POST':
-        form = PhotoUploadForm(request.POST, request.FILES)
+class EditView(LoginRequiredMixin, UpdateView):
+    model = Photo
+    template_name = 'photos/edit.html'
+    fields = ['description']
 
-        if form.is_valid():
-            photo = form.save(commit=False)
-            photo.pub_date = timezone.now()
-            photo.user = request.user
-            photo.save()
+    def get_success_url(self):
+        return reverse(
+            'photos:photo',
+            kwargs={'photo_uu_id': self.kwargs['photo_uu_id']},
+        )
 
-            return render(request, 'photos/photo.html', {'photo': photo})
-    else:
-        form = PhotoUploadForm()
-    return render(request, 'photos/upload.html', {'form': form})
+    def get_object(self):
+        return Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
 
 
-@login_required
-def edit(request, photo_uu_id):
-    photo = Photo.objects.get(uu_id=photo_uu_id)
+class UploadView(LoginRequiredMixin, CreateView):
+    model = Photo
+    template_name = 'photos/upload.html'
+    fields = [
+        'image',
+        'title',
+        'description',
+    ]
 
-    if request.user != photo.user:
-        return redirect('photos:photo', photo_uu_id=photo_uu_id)
+    def form_valid(self, form):
+        self.photo = form.save(commit=False)
+        self.photo.pub_date = timezone.now()
+        self.photo.user = self.request.user
 
-    if request.method == 'POST':
-        form = PhotoEditForm(request.POST, request.FILES, instance=photo)
-        if form.is_valid():
-            form.save()
-            return redirect('photos:photo', photo_uu_id=photo_uu_id)
-    else:
-        form = PhotoEditForm(instance=photo)
+        return super(UploadView, self).form_valid(form)
 
-    context = {
-        'photo': photo,
-        'form': form,
-    }
-
-    return render(request, 'photos/edit.html', context)
+    def get_success_url(self):
+        return reverse(
+            'photos:photo',
+            kwargs={'photo_uu_id': self.photo.uu_id},
+        )
