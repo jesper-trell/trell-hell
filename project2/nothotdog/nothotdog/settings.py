@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -181,3 +181,8 @@ LOGIN_REDIRECT_URL = "photos:index"
 LOGOUT_REDIRECT_URL = "photos:index"
 
 RABBITMQ_HOST = "localhost"
+
+ML_DATA_PATH = (str(BASE_DIR)
+                + "/nothotdog/photos/hotdog_finder/hotdog_data")
+ML_MODEL_PATH = (str(BASE_DIR)
+                 + '/nothotdog/photos/hotdog_finder/hotdog_CNN_model')
