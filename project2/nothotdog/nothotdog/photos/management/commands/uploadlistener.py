@@ -5,8 +5,7 @@ import numpy as np
 import pika
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from nothotdog.photos.hotdog_finder.data_augmentation import (normalize_images,
-                                                              to_gray)
+from hotdog_finder.data_augmentation import normalize_images, to_gray
 from nothotdog.photos.models import Photo
 from tensorflow import keras
 
@@ -30,17 +29,17 @@ class Command(BaseCommand):
             # Give time for database to update before accessing.
             time.sleep(1)
             photo = Photo.objects.get(id=photo_id)
-            print(f" [x] Processing {photo}.")
+            print(f' [x] Processing {photo}.')
 
             prediction, is_hotdog = process_image(photo)
             hotdog_probability = round(prediction[0] * 100, 1)
             if not is_hotdog:
                 photo.flagged = True
-                print(f" [x] Flagged {photo}.")
+                print(f' [x] Flagged {photo}.')
 
             photo.save()
-            print(f" [x] Finished processing {photo}.")
-            print(f" [x] Probability of hot dog is {hotdog_probability} %.")
+            print(f' [x] Finished processing {photo}.')
+            print(f' [x] Probability of hot dog is {hotdog_probability} %.')
 
         def process_image(photo):
             img_size = (32, 32)

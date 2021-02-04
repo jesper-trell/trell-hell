@@ -1,4 +1,4 @@
-{% extends 'photos/base.html' %}
+{% extends "photos/base.html" %}
 
 {% block bodyclass %}photo{% endblock %}
 
@@ -7,11 +7,7 @@
 
 <div class="page-container-photo">
     <div class="title-container">
-        {% if user.username %}
-            <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
-        {% elif user.username %}
-            <p class="page-title"><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> "{{ photo.title }}"</p>
-        {% endif %}
+        <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
     </div>
 
     <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">

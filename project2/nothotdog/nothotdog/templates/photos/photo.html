@@ -1,4 +1,4 @@
-{% extends 'photos/base.html' %}
+{% extends "photos/base.html" %}
 
 {% block bodyclass %}photo{% endblock %}
 
@@ -16,7 +16,7 @@
         {% endif %}
 
         {% if user == photo.user %}
-            <a href="{% url 'photos:edit' photo.uu_id %}" class="edit-button">Edit</a>
+            <a href="{% url "photos:edit" photo.uu_id %}" class="edit-button">Edit</a>
         {% endif%}
     </div>
 

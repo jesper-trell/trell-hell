@@ -45,8 +45,8 @@ def load_data(img_size, class_size, hotdogs, not_hotdogs):
                                      class_size,
                                      img_size,
                                  )
-    print("There are", len(x_hotdog), "hotdog images")
-    print("There are", len(x_not_hotdog), "not hotdog images")
+    print('There are', len(x_hotdog), 'hotdog images')
+    print('There are', len(x_not_hotdog), 'not hotdog images')
 
     X = np.array(x_hotdog + x_not_hotdog)
     y = np.array(y_hotdog + y_not_hotdog)

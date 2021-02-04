@@ -13,9 +13,8 @@ class PhotoTestCase(TestCase):
             'pass'
         )
         Photo.objects.create(
-            # image=,
-            title="title",
-            description="description",
+            title='title',
+            description='description',
             pub_date=timezone.now(),
             user=test_user,
             flagged=False,
@@ -23,7 +22,7 @@ class PhotoTestCase(TestCase):
 
     # Printing a Photo displays the title.
     def test_photo_prints_title(self):
-        photo = Photo.objects.get(title="title")
+        photo = Photo.objects.get(title='title')
         self.assertEqual(str(photo), 'title')
 
 

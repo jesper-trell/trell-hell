@@ -1,6 +1,6 @@
 import glob
 
-import nothotdog.photos.hotdog_finder.data_augmentation as data_augmentation
+import hotdog_finder.data_augmentation as data_augmentation
 import numpy as np
 import tensorflow
 from django.conf import settings
@@ -24,6 +24,7 @@ class Command(BaseCommand):
         no_epochs = 1  # 100
         verbosity = 1  # 1 for printing all results to screen.
 
+        # Gets hot dog image paths.
         hotdogs = (
             glob.glob(
                 settings.ML_DATA_PATH + '/train/hot_dog/**/*.jpg',
@@ -34,6 +35,7 @@ class Command(BaseCommand):
                 recursive=True)
             )
 
+        # Gets not hot dog image paths.
         not_hotdogs = (
             glob.glob(
                 settings.ML_DATA_PATH + '/train/not_hot_dog/**/*.jpg',
@@ -44,12 +46,16 @@ class Command(BaseCommand):
                 recursive=True)
             )
 
+        # Loads images and generates new images.
         scaled_X, y = data_augmentation.load_data(
                         size,
                         class_size,
                         hotdogs,
                         not_hotdogs
                     )
+
+        # Changes color of images and converts the class vector y
+        # to a binary class matrix.
         scaled_X = data_augmentation.preprocess_data(scaled_X)
         y = to_categorical(y)
 
@@ -63,10 +69,10 @@ class Command(BaseCommand):
                                             random_state=rand_state
                                             )
 
-        print("Train shape X: ", X_train.shape)
-        print("Train shape y: ", y_train.shape)
-        print("Test shape X: ", X_test.shape)
-        print("Test shape y: ", y_test.shape)
+        print('Train shape X: ', X_train.shape)
+        print('Train shape y: ', y_train.shape)
+        print('Test shape X: ', X_test.shape)
+        print('Test shape y: ', y_test.shape)
 
         # Model creation.
         def create_model():

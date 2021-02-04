@@ -1,9 +1,5 @@
-import pika
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views import generic
@@ -94,29 +90,3 @@ def edit(request, photo_uu_id):
     }
 
     return render(request, 'photos/edit.html', context)
-
-
-def send_photo_alert(message):
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host=settings.RABBITMQ_HOST)
-    )
-    channel = connection.channel()
-
-    channel.queue_declare(queue='hotdog_alert')
-    channel.basic_publish(
-        exchange='',
-        routing_key='hotdog_alert',
-        body=message,
-        properties=pika.BasicProperties(
-            delivery_mode=2,  # Make message persistent.
-        )
-    )
-    connection.close()
-
-
-@receiver(post_save, sender=Photo)
-def callback(sender, instance, created, **kwargs):
-    # Do nothing if there was no new upload.
-    if created:
-        bytes_data = (instance.id).to_bytes(2, byteorder='big')
-        send_photo_alert(bytes_data)

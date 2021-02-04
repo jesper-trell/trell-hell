@@ -144,8 +144,8 @@ STATICFILES_FINDERS = (
 )
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "assets"),
-    os.path.join(BASE_DIR, "node_modules"),
+    os.path.join(BASE_DIR, 'assets'),
+    os.path.join(BASE_DIR, 'node_modules'),
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -177,12 +177,10 @@ if not DEBUG:
             '-t babelify {infile} -o {outfile}'),
     )
 
-LOGIN_REDIRECT_URL = "photos:index"
-LOGOUT_REDIRECT_URL = "photos:index"
+LOGIN_REDIRECT_URL = 'photos:index'
+LOGOUT_REDIRECT_URL = 'photos:index'
 
-RABBITMQ_HOST = "localhost"
+RABBITMQ_HOST = 'localhost'
 
-ML_DATA_PATH = (str(BASE_DIR)
-                + "/nothotdog/photos/hotdog_finder/hotdog_data")
-ML_MODEL_PATH = (str(BASE_DIR)
-                 + '/nothotdog/photos/hotdog_finder/hotdog_CNN_model')
+ML_DATA_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_data'
+ML_MODEL_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_CNN_model'
