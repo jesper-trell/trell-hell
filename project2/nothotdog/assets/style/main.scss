@@ -1,8 +1,9 @@
-:root {
-  --nothotdog_blue: #0ccfff;
-  --topbar_color: #0b193c;
-  --topbar_selected_color: #23376b;
-}
+$nothotdog-blue: #0ccfff;
+$topbar-color: #0b193c;
+$topbar-selected-color: #23376b;
+$text-button-color: white;
+$standard-font-size: 20px;
+$title-font-size: 25px;
 
 label, input {
     display: block;
@@ -18,18 +19,18 @@ ul li {
 
 /* Add a background color to the top navigation */
 .topnav {
-  background-color: var(--topbar_color);
+  background-color: $topbar-color;
   overflow: hidden;
   position: relative;
   }
 
 /* Style the links inside the navigation bar */
 .topnav a {
-  color: white;
+  color: $text-button-color;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 20px;
+  font-size: $standard-font-size;
   line-height: 30px;
 }
 
@@ -44,7 +45,7 @@ ul li {
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: var(--topbar_selected_color);
+  background-color: $topbar-selected-color;
 }
 
 /* Right-aligned section inside the top navigation */
@@ -55,9 +56,9 @@ ul li {
 .edit-button {
   padding: 5px;
   text-decoration: none;
-  font-size: 20px;
-  background-color: var(--nothotdog_blue);
-  color: white;
+  font-size: $standard-font-size;
+  background-color: $nothotdog-blue;
+  color: $text-button-color;
   border: none;
   margin: 4px 2px;
   position: absolute;
@@ -85,19 +86,19 @@ a {
 }
 
 .index .index-btn {
-  color: var(--nothotdog_blue);
+  color: $nothotdog-blue;
 }
 
 .index .profile-btn {
-  color: var(--nothotdog_blue);
+  color: $nothotdog-blue;
 }
 
 .upload .upload-btn {
-  color: var(--nothotdog_blue);
+  color: $nothotdog-blue;
 }
 
 .login .login-btn {
-  color: var(--nothotdog_blue);
+  color: $nothotdog-blue;
 }
 
 .page-container {
@@ -120,7 +121,7 @@ a {
 
 .page-title {
   float: left;
-  font-size: 25px;
+  font-size: $title-font-size;
 }
 
 .pagination-container {
@@ -139,7 +140,7 @@ a {
 // }
 
 .image-label {
-  font-size: 20px;
+  font-size: $standard-font-size;
 }
 
 img {

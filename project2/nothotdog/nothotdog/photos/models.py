@@ -8,7 +8,7 @@ from django.utils import timezone
 
 class Photo(models.Model):
     image = models.ImageField(upload_to='images/')
-    title = models.CharField(max_length=160,)
+    title = models.CharField(max_length=100)
     description = models.CharField(max_length=160, blank=True)
     pub_date = models.DateTimeField('Date published')
     user = models.ForeignKey(User, on_delete=models.CASCADE)

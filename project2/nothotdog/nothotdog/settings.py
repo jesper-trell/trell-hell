@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'compressor',
     'nothotdog',
     'nothotdog.photos',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
