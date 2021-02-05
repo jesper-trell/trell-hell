@@ -1,20 +1,21 @@
-/env
-
 __pycache__/
+env/
+hotdog_data/
+media/
+node_modules/
+static/
 .pytest_cache/
 .vscode/
-hotdog_data/
 
 .module-cache
 .sass-cache
 .tmp
 .DS_Store
+db.sqlite3
 local_settings.py
 
 *.py[co]
 *.pyc
 
-project2/nothotdog/media
-project2/nothotdog/static
-project2/nothotdog/db.sqlite3
-project2/nothotdog/node_modules
+
+

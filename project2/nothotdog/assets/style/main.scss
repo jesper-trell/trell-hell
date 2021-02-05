@@ -22,16 +22,26 @@ ul li {
   background-color: $topbar-color;
   overflow: hidden;
   position: relative;
+
+  /* Style the links inside the navigation bar */
+  a {
+    color: $text-button-color;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: $standard-font-size;
+    line-height: 30px;
   }
 
-/* Style the links inside the navigation bar */
-.topnav a {
-  color: $text-button-color;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: $standard-font-size;
-  line-height: 30px;
+  /* Change the color of links on hover */
+  a:hover {
+    background-color: $topbar-selected-color;
+  }
+}
+
+/* Right-aligned section inside the top navigation */
+.topnav-right {
+  float: right;
 }
 
 .vertical-center {
@@ -41,16 +51,6 @@ ul li {
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
   padding: 0px 10px;
-}
-
-/* Change the color of links on hover */
-.topnav a:hover {
-  background-color: $topbar-selected-color;
-}
-
-/* Right-aligned section inside the top navigation */
-.topnav-right {
-  float: right;
 }
 
 .edit-button {

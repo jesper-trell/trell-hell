@@ -22,6 +22,7 @@ from django.urls import path
 urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     path('admin', admin.site.urls),
+    path('', include('nothotdog.frontend.urls')),
     path('', include('nothotdog.photos.urls')),
 ]
 

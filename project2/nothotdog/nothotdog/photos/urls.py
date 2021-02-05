@@ -9,7 +9,8 @@ urlpatterns = [
     path('photos', views.IndexView.as_view(), name='index'),
     path('profile', views.ProfileView.as_view(), name='profile'),
     path('upload', views.UploadView.as_view(), name='upload'),
-    path('users', views.UsersViewAPI.as_view(), name='users'),
+    path('users_API', views.UsersViewAPI.as_view(), name='users_API'),
+    path('photos_API', views.PhotosViewAPI.as_view(), name='photos_API'),
     path('<str:photo_uu_id>', views.PhotoView.as_view(), name='photo'),
     path('<str:photo_uu_id>/edit', views.EditView.as_view(), name='edit'),
 ]

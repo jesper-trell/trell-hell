@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from rest_framework.generics import ListCreateAPIView
-from nothotdog.photos.serializers import UserSerializer
+from nothotdog.photos.serializers import UserSerializer, PhotoSerializer
 from django.contrib.auth.models import User
 
 from .models import Photo
@@ -14,6 +14,11 @@ from .models import Photo
 class UsersViewAPI(LoginRequiredMixin, ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class PhotosViewAPI(LoginRequiredMixin, ListCreateAPIView):
+    queryset = Photo.objects.all()
+    serializer_class = PhotoSerializer
 
 
 class ConfigurablePaginationMixin:
