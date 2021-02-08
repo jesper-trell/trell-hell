@@ -7,7 +7,10 @@ from .models import Photo
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = [
+            'username',
+            'email'
+        ]
 
 
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,4 +21,5 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
             'title',
             'description',
             'flagged',
+            'uu_id',
         ]

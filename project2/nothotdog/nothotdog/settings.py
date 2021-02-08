@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import logging
 import os
 from pathlib import Path
 
@@ -192,3 +193,13 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
     ]
 }
+
+logging.basicConfig(
+    filename='events.log',
+    level=logging.WARNING,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    # format='%(asctime)s - %(message)s',
+)
+
+LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)

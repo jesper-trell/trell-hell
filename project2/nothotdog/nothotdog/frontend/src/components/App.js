@@ -36,9 +36,16 @@ class App extends Component {
       <ul>
         {this.state.data.map(photo => {
           return (
-            <li key={photo.id}>
-              {photo.title} - {photo.description}
-            </li>
+            <div>{photo.title} - {photo.description} - {photo.image} - {photo.image.url} - {photo.user} - {photo.pub_date} - {photo.flagged} - {photo.uu_id}</div>
+            // <li key={photo.id}>
+            //   {photo.title} - {photo.description}
+            // </li>
+
+            // <img src={photo.image.url} alt={photo.title} style="width:300px;height:200px;"></img>
+            // <figure>
+            //     <img src="{photo.image.url}" alt="{photo.uu_id}" style="width:300px;height:200px;"></img>
+            //     <figcaption class="image-label"><a href="{photo.uu_id}"></a></figcaption>
+            // </figure>
           );
         })}
       </ul>

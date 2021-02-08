@@ -1,3 +1,4 @@
+# import logging
 import time
 
 import cv2
@@ -30,16 +31,20 @@ class Command(BaseCommand):
             time.sleep(1)
             photo = Photo.objects.get(id=photo_id)
             print(f' [x] Processing {photo}.')
+            settings.LOGGER.info(f' [x] Processing {photo}.')
 
             prediction, is_hotdog = process_image(photo)
             hotdog_probability = round(prediction[0] * 100, 1)
             if not is_hotdog:
                 photo.flagged = True
                 print(f' [x] Flagged {photo}.')
+                settings.LOGGER.info(f' [x] Flagged {photo}.')
 
             photo.save()
             print(f' [x] Finished processing {photo}.')
             print(f' [x] Probability of hot dog is {hotdog_probability} %.')
+            settings.LOGGER.info(f' [x] Finished processing {photo}.')
+            settings.LOGGER.info(f' [x] Probability of hot dog is {hotdog_probability} %.')  # noqa
 
         def process_image(photo):
             img_size = (32, 32)
@@ -70,4 +75,5 @@ class Command(BaseCommand):
         )
 
         print(' [*] Waiting for messages. To exit press CTRL+C')
+        settings.LOGGER.info(' [*] Waiting for messages.')
         channel.start_consuming()

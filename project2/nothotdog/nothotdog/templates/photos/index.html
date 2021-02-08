@@ -24,7 +24,7 @@
                     <div style="display:inline-block;">
                         <figure>
                             <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:300px;height:200px;">
-                            <figcaption class="image-label"><a href="{% url "photos:photo" photo.uu_id %}">{{ photo.title }}</a></figcaption>
+                            <figcaption class="image-label"><a href="{% url "photos:photo" photo.uu_id %}">{{ photo.image }}</a></figcaption>
                         </figure>
                     </div>
                 {% endfor %}
