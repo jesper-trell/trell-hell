@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+from nothotdog.photos.serializers import PhotoSerializer, UserSerializer
 from rest_framework.generics import ListCreateAPIView
-from nothotdog.photos.serializers import UserSerializer, PhotoSerializer
-from django.contrib.auth.models import User
 
 from .models import Photo
 
