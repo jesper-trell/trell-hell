@@ -37,7 +37,7 @@ class App extends Component {
         {this.state.data.map(photo => {
           return (
             // <div>{photo.image}</div>
-            <div>{photo.title} - {photo.description} - {photo.image} - {photo.pub_date} - {photo.flagged.toString()} - {photo.uu_id} - {photo.user_name} -</div>
+            <div>{photo.title} - {photo.description} - {photo.image} - {photo.pub_date} - {photo.flagged.toString()} - {photo.uu_id} - {photo.username} -</div>
             // <img src="../../../../media/images/13023.jpg" style="width:300px;height:200px;" />
             // <img src={require(photo.image)} style="width:300px;height:200px;" />
             // <img src={photo.image} alt="{photo.uu_id}" style="width:300px;height:200px;"/>
