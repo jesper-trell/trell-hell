@@ -1,4 +1,4 @@
-# import logging
+import logging
 import time
 
 import cv2
@@ -25,6 +25,9 @@ class Command(BaseCommand):
 
         model = keras.models.load_model(settings.ML_MODEL_PATH)
 
+        logger = logging.getLogger(__name__)
+        print(logger)
+
         def callback(ch, method, properties, body):
             photo_id = int.from_bytes(body, byteorder='big')
 
@@ -32,7 +35,7 @@ class Command(BaseCommand):
             time.sleep(1)
             photo = Photo.objects.get(id=photo_id)
             print(f' [x] Processing {photo}.')
-            settings.LOGGER.info(f' [x] Processing {photo}.')
+            logger.info(f'[x] Processing {photo}.')
 
             prediction, is_hotdog = process_image(photo)
             hotdog_probability = round(prediction[0] * 100, 1)
@@ -40,13 +43,13 @@ class Command(BaseCommand):
                 send_hotdog_mail(photo)
                 photo.flagged = True
                 print(f' [x] Flagged {photo}.')
-                settings.LOGGER.info(f' [x] Flagged {photo}.')
+                logger.info(f'[x] Flagged {photo}.')
 
             photo.save()
             print(f' [x] Finished processing {photo}.')
             print(f' [x] Probability of hot dog is {hotdog_probability} %.')
-            settings.LOGGER.info(f' [x] Finished processing {photo}.')
-            settings.LOGGER.info(f' [x] Probability of hot dog is {hotdog_probability} %.')  # noqa
+            logger.info(f'[x] Finished processing {photo}.')
+            logger.info(f'[x] Probability of hot dog is {hotdog_probability} %.')  # noqa
 
         def process_image(photo):
             img_size = (32, 32)
@@ -88,5 +91,5 @@ class Command(BaseCommand):
         )
 
         print(' [*] Waiting for messages. To exit press CTRL+C')
-        settings.LOGGER.info(' [*] Waiting for messages.')
+        logger.info('[*] Waiting for messages.')
         channel.start_consuming()

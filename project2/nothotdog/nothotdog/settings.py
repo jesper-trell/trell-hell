@@ -194,11 +194,27 @@ REST_FRAMEWORK = {
     ]
 }
 
-logging.basicConfig(
-    filename='events.log',
-    level=logging.WARNING,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-)
-
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.INFO)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{asctime} - {name} - {levelname} - {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'events.log',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'nothotdog.photos.management.commands.uploadlistener': {
+            'level': 'INFO',
+            'handlers': ['file'],
+        },
+    },
+}

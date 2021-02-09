@@ -1,5 +1,5 @@
 {% load static %}
-<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+{% load compress %}
 
 <!DOCTYPE html>
 
@@ -8,11 +8,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Django REST with React</title>
+        <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
     </head>
     <body>
         <div id="app">
             <!-- React will load here -->
         </div>
     </body>
-    <script src="{% static "frontend/main.js" %}"></script>
+    {% compress js %}
+        <script type="text/jsx" src="{% static "frontend/main.js" %}"></script>
+    {% endcompress %}
 </html>

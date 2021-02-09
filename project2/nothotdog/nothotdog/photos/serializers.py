@@ -14,7 +14,16 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
-    image_url = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField(read_only=True)
+    # user_name = serializers.RelatedField(source='user', read_only=True)
+
+    def get_image(self, obj):
+        # obj is model instance
+        return obj.image.url
+
+    # def get_user_name(self, obj):
+    #     # obj is model instance
+    #     return obj.user.username
 
     class Meta:
         model = Photo
@@ -23,10 +32,7 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
             'title',
             'description',
             'pub_date',
-            # 'user',
+            # 'user_name',
             'flagged',
             'uu_id',
         ]
-
-    def get_image_url(self, obj):
-        return obj.image.url
