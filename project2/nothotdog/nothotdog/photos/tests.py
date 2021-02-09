@@ -1,3 +1,5 @@
+from unittest.mock import Mock, PropertyMock
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
@@ -93,11 +95,17 @@ class PhotoViewTests(TestCase):
         cls.title2 = 'title2'
 
     def test_unflagged_photo(self):
-        unflagged_photo = create_photo(
-            title=self.title1,
-            user=self.user,
-            flagged=False,
-        )
+
+        import uuid
+        unflagged_photo = Mock(title='title', uu_id=uuid.uuid4())
+
+        # unflagged_photo = create_photo(
+        #     title=self.title1,
+        #     user=self.user,
+        #     flagged=False,
+        # )
+        print(unflagged_photo.uu_id)
+        print(unflagged_photo.title)
         url = reverse('photos:photo', args=(unflagged_photo.uu_id,))
         response = self.client.get(url)
         self.assertContains(response, unflagged_photo.title)

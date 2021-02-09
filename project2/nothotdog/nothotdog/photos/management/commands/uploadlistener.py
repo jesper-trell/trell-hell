@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import pika
 from django.conf import settings
+from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
 from hotdog_finder.data_augmentation import normalize_images, to_gray
 from nothotdog.photos.models import Photo
@@ -36,6 +37,7 @@ class Command(BaseCommand):
             prediction, is_hotdog = process_image(photo)
             hotdog_probability = round(prediction[0] * 100, 1)
             if not is_hotdog:
+                send_hotdog_mail(photo)
                 photo.flagged = True
                 print(f' [x] Flagged {photo}.')
                 settings.LOGGER.info(f' [x] Flagged {photo}.')
@@ -67,6 +69,17 @@ class Command(BaseCommand):
             is_hotdog = True if prediction[0] > prediction[1] else False
 
             return (prediction, is_hotdog)
+
+        def send_hotdog_mail(photo):
+            send_mail(
+                    subject='Image Flagged',
+                    message=(
+                        f'The image "{photo}" has been flagged '
+                        + 'for not depicting a hot dog.'),
+                    from_email='info@trell.se',
+                    recipient_list=[photo.user.email],
+                    fail_silently=False,
+                )
 
         channel.basic_consume(
             queue='hotdog_alert',

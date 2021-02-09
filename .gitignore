@@ -12,6 +12,7 @@ static/
 .tmp
 .DS_Store
 db.sqlite3
+events.log
 local_settings.py
 
 *.py[co]
