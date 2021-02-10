@@ -1,21 +1,19 @@
-{% load static %}
-{% load compress %}
+{% extends "photos/base.html" %}
 
-<!DOCTYPE html>
+{% block bodyclass %}photo{% endblock %}
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Django REST with React</title>
-        <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
-    </head>
-    <body>
-        <div id="app">
+{% block content %}
+
+<div class="page-container">
+    <div class="pagination-container">
+        <div id="pagination">
             <!-- React will load here -->
         </div>
-    </body>
-    {% compress js %}
-        <script type="text/jsx" src="{% static "frontend/main.js" %}"></script>
-    {% endcompress %}
-</html>
+    </div>
+
+    <div id="app">
+        <!-- React will load here -->
+    </div>
+</div>
+
+{% endblock %}

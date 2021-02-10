@@ -25,17 +25,6 @@ def create_user(username):
         )
 
 
-def get_response(self, namespace, view, args=()):
-    # # b = args
-    # if b != ():
-        # b = (b,)
-    # print('uuid in inner')
-    # print(b)
-    # print(type(b))
-    url = reverse(f'{namespace}:{view}', args=args)
-    return self.client.get(url)
-
-
 class PhotoCreationTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -55,7 +44,7 @@ class IndexViewTests(TestCase):
         cls.title2 = 'title2'
 
     def test_no_photos(self):
-        response = get_response(self, namespace='photos', view='index')
+        response = self.client.get(reverse('photos:index'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'No photos are available.')
         self.assertQuerysetEqual(
@@ -65,7 +54,7 @@ class IndexViewTests(TestCase):
 
     def test_unflagged_photo(self):
         create_photo(title=self.title1, user=self.user, flagged=False)
-        response = get_response(self, namespace='photos', view='index')
+        response = self.client.get(reverse('photos:index'))
         self.assertQuerysetEqual(
             response.context['photos_list'],
             [f'<Photo: {self.title1}>'],
@@ -73,7 +62,7 @@ class IndexViewTests(TestCase):
 
     def test_flagged_photo(self):
         create_photo(title=self.title1, user=self.user, flagged=True)
-        response = get_response(self, namespace='photos', view='index')
+        response = self.client.get(reverse('photos:index'))
         self.assertQuerysetEqual(
             response.context['photos_list'],
             [],
@@ -82,7 +71,7 @@ class IndexViewTests(TestCase):
     def test_unflagged_and_flagged_photo(self):
         create_photo(title=self.title1, user=self.user, flagged=False)
         create_photo(title=self.title2, user=self.user, flagged=True)
-        response = get_response(self, namespace='photos', view='index')
+        response = self.client.get(reverse('photos:index'))
         self.assertQuerysetEqual(
             response.context['photos_list'],
             [f'<Photo: {self.title1}>']
@@ -91,7 +80,7 @@ class IndexViewTests(TestCase):
     def test_two_unflagged_photos(self):
         create_photo(title=self.title1, user=self.user, flagged=False)
         create_photo(title=self.title2, user=self.user, flagged=False)
-        response = get_response(self, namespace='photos', view='index')
+        response = self.client.get(reverse('photos:index'))
         self.assertQuerysetEqual(
             response.context['photos_list'],
             [f'<Photo: {self.title2}>', f'<Photo: {self.title1}>']
@@ -106,19 +95,13 @@ class PhotoViewTests(TestCase):
         cls.title2 = 'title2'
 
     def test_unflagged_photo(self):
-        # import uuid
-        # unflagged_photo = Mock(title='title', uu_id=uuid.uuid4())
-
         unflagged_photo = create_photo(
             title=self.title1,
             user=self.user,
             flagged=False,
         )
-        response = get_response(
-            self,
-            namespace='photos',
-            view='photo',
-            args=(unflagged_photo.uu_id,),
+        response = self.client.get(
+            reverse('photos:photo', args=(unflagged_photo.uu_id,))
         )
         self.assertContains(response, unflagged_photo.title)
 
@@ -128,10 +111,7 @@ class PhotoViewTests(TestCase):
             user=self.user,
             flagged=True,
         )
-        response = get_response(
-            self,
-            namespace='photos',
-            view='photo',
-            args=(flagged_photo.uu_id,),
+        response = self.client.get(
+            reverse('photos:photo', args=(flagged_photo.uu_id,))
         )
         self.assertEqual(response.status_code, 404)

@@ -1,6 +1,27 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 
+
+class Pagination extends Component {
+  render() {
+    return (
+      <div className="pagination-container">
+        <form method="GET">
+          <select name="paginate_by">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+          </select>
+          <input type="submit" value="Paginate"/>
+        </form>
+      </div>
+    )
+  }
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -36,11 +57,7 @@ class App extends Component {
       <ul>
         {this.state.data.map(photo => {
           return (
-            // <div>{photo.image}</div>
-            <div>{photo.title} - {photo.description} - {photo.image} - {photo.pub_date} - {photo.flagged.toString()} - {photo.uu_id} - {photo.username} -</div>
-            // <img src="../../../../media/images/13023.jpg" style="width:300px;height:200px;" />
-            // <img src={require(photo.image)} style="width:300px;height:200px;" />
-            // <img src={photo.image} alt="{photo.uu_id}" style="width:300px;height:200px;"/>
+            <img key={ photo.id } src={ photo.image } alt={ photo.uu_id } style={ {width:300, height:200} }/>
           );
         })}
       </ul>
@@ -48,7 +65,8 @@ class App extends Component {
   }
 }
 
-export default App;
-
 const container = document.getElementById("app");
 render(<App />, container);
+
+const pagination_container = document.getElementById("pagination");
+render(<Pagination />, pagination_container);

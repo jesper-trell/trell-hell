@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
-import logging
 import os
 from pathlib import Path
 
@@ -48,7 +47,6 @@ INSTALLED_APPS = [
     'compressor',
     'nothotdog',
     'nothotdog.photos',
-    'nothotdog.frontend',
     'rest_framework',
 ]
 

@@ -11,6 +11,10 @@ from rest_framework.generics import ListCreateAPIView
 from .models import Photo
 
 
+class TestView(TemplateView):
+    template_name = 'frontend/test.html'
+
+
 class UsersViewAPI(LoginRequiredMixin, ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
