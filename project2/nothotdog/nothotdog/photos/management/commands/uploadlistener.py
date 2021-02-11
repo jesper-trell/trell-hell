@@ -26,7 +26,6 @@ class Command(BaseCommand):
         model = keras.models.load_model(settings.ML_MODEL_PATH)
 
         logger = logging.getLogger(__name__)
-        print(logger)
 
         def callback(ch, method, properties, body):
             photo_id = int.from_bytes(body, byteorder='big')
