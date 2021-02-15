@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
+import { ContactsApp } from './components/contacts';
+import { LikesApp } from './components/likes';
 
 
 class Pagination extends Component {
@@ -65,8 +67,16 @@ class App extends Component {
   }
 }
 
-const container = document.getElementById("app");
+const container = document.getElementById('app');
 render(<App />, container);
 
-const pagination_container = document.getElementById("pagination");
+const pagination_container = document.getElementById('pagination');
 render(<Pagination />, pagination_container);
+
+const test_container = document.getElementById('test-container');
+render(<ContactsApp />, test_container);
+
+const likes_container = document.getElementById('likes-container');
+render(<LikesApp />, likes_container);
+
+export default App

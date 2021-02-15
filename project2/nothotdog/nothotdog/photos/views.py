@@ -5,14 +5,43 @@ from django.utils import timezone
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from nothotdog.photos.serializers import PhotoSerializer, UserSerializer
-from rest_framework.generics import ListCreateAPIView
+from nothotdog.photos.serializers import (LikeSerializer, PhotoSerializer,
+                                          UserSerializer)
+from rest_framework import status
+from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.response import Response
 
-from .models import Photo
+from .models import Like, Photo
 
 
 class TestView(TemplateView):
     template_name = 'frontend/test.html'
+
+
+class LikesViewAPI(ListAPIView):
+    def get_queryset(self):
+        return Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+
+    def get(self, request, *args, **kwargs):
+        photo = self.get_queryset()
+        likes = Like.objects.filter(photo=photo)
+
+        serializer = LikeSerializer(
+            likes,
+            context={'request': request},
+            many=True
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # def post(self, request, *args, **kwargs):
+    #     photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+    #     like = Like.objects.create(photo=photo, user=self.request.user)
+    #     like.save()
+
+    #     return reverse(
+    #         'photos:photo',
+    #         kwargs={'photo_uu_id': photo.uu_id},
+    #     )
 
 
 class UsersViewAPI(LoginRequiredMixin, ListCreateAPIView):
@@ -70,7 +99,11 @@ class PhotoView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+        likes = Like.objects.filter(photo=photo)
+        num_likes = len(likes)
         context['photo'] = photo
+        context['num_likes'] = num_likes
+        context['likes'] = likes
         return context
 
 
@@ -110,3 +143,11 @@ class UploadView(LoginRequiredMixin, CreateView):
             'photos:photo',
             kwargs={'photo_uu_id': self.photo.uu_id},
         )
+
+# def LikeView(request, photo_uu_id):
+#     user = request.user
+#     photo = Photo.objects.get(uu_id=photo_uu_id)
+#     print(user)
+#     print(photo)
+#     from django.shortcuts import redirect
+#     return redirect('photos:profile')

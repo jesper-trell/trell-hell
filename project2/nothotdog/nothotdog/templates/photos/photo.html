@@ -2,10 +2,7 @@
 
 {% block bodyclass %}photo{% endblock %}
 
-{% load static %}
-
 {% block content %}
-
 
 <div class="page-container-photo">
     <div class="title-container">
@@ -20,8 +17,23 @@
         {% endif%}
     </div>
 
-    <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
+    <div class="title-container">
+        <p class="page-title">Likes: {{ num_likes }}</p>
+        {% if user.username %}
+            <a href="{% url "photos:likes_API" photo.uu_id %}" class="edit-button">Like</a>
+        {% endif%}
+    </div>
 
+    <div>
+        <span>Liked by: </span>
+        {% for like in likes %}
+            <div style="display:inline-block;">
+                <p>{{ like.user }},</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
 
     <div class="title-container">
         <span class="description">{{ photo.description}}</span>

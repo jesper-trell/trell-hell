@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Photo
+from .models import Like, Photo
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -14,4 +14,14 @@ class PhotoAdmin(admin.ModelAdmin):
     )
 
 
+class LikeAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'date',
+        'user',
+        'photo',
+    )
+
+
 admin.site.register(Photo, PhotoAdmin)
+admin.site.register(Like, LikeAdmin)

@@ -14,9 +14,25 @@ class Photo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flagged = models.BooleanField(default=False)
     uu_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    # likes = models.ManyToManyField(User, through='Like')
 
     def __str__(self):
         return self.title
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+
+class Like(models.Model):
+    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField()
+
+    def __str__(self):
+        return f"'{self.user}' likes '{self.photo}'"
+
+
+# class Like(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+#     date = models.DateTimeField()

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Photo
+from .models import Like, Photo
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,4 +26,15 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
             'username',
             'flagged',
             'uu_id',
+        ]
+
+
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Like
+        fields = [
+            'user',
+            'date',
         ]
