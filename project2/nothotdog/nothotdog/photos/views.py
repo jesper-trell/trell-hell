@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db import models
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -20,39 +21,30 @@ class TestView(TemplateView):
 
 
 class LikesViewAPI(ListAPIView):
+    serializer_class = LikeSerializer
+
     def get_queryset(self):
-        return Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-
-    def get(self, request, *args, **kwargs):
-        photo = self.get_queryset()
-        likes = Like.objects.filter(photo=photo)
-
-        serializer = LikeSerializer(
-            likes,
-            context={'request': request},
-            many=True
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+        return Like.objects.filter(photo=photo)
 
     def post(self, request, *args, **kwargs):
-        photo = self.get_queryset()
+        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
         like = Like.objects.create(
             photo=photo,
             user=self.request.user,
             date=timezone.now()
         )
-        like.save()
 
-        return redirect('photos:photo', photo_uu_id=photo.uu_id)
-        # return reverse(
-        #     'photos:photo',
-        #     kwargs={'photo_uu_id': photo.uu_id},
-        # )
+        serializer = LikeSerializer(
+            like,
+            context={'request': request},
+        )
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    # def post(self, request, *args, **kwargs):
-    #     photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-    #     like = Like.objects.create(photo=photo, user=self.request.user)
-    #     like.save()
+    def delete(self, request, *args, **kwargs):
+        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+        photo.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UsersViewAPI(LoginRequiredMixin, ListCreateAPIView):
@@ -109,9 +101,13 @@ class PhotoView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # photo = Photo.objects.prefetch_related('likes').annotate(
+        #     num_likes=models.Count('likes'),
+        #     username=models.F('user__name')
+        # ).get(uu_id=self.kwargs['photo_uu_id'])
         photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
         likes = Like.objects.filter(photo=photo)
-        num_likes = len(likes)
+        num_likes = likes.count()
         context['photo'] = photo
         context['num_likes'] = num_likes
         context['likes'] = likes
@@ -154,11 +150,3 @@ class UploadView(LoginRequiredMixin, CreateView):
             'photos:photo',
             kwargs={'photo_uu_id': self.photo.uu_id},
         )
-
-# def LikeView(request, photo_uu_id):
-#     user = request.user
-#     photo = Photo.objects.get(uu_id=photo_uu_id)
-#     print(user)
-#     print(photo)
-#     from django.shortcuts import redirect
-#     return redirect('photos:profile')

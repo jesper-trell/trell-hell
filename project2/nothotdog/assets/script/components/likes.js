@@ -10,11 +10,11 @@ class LikesApp extends Component {
 
   componentDidMount() {
     fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
-    .then(response => response.json())
-    .then((data) => {
-      this.setState({ likes: data })
-    })
-    .catch(console.log)
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ likes: data })
+      })
+      .catch(console.log)
   }
 
   render() {
@@ -27,6 +27,7 @@ class LikesApp extends Component {
 const Likes = ({ likes }) => {
     return (
       <div>
+        {/* <center><h1>Contact List</h1></center> */}
         <span>Liked by: </span>
         {likes.map(like => (
           <div style={ {display:'inline-block'} }>
@@ -37,4 +38,4 @@ const Likes = ({ likes }) => {
     )
 };
 
-export { LikesApp }
+export default LikesApp

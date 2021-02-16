@@ -5,7 +5,6 @@
 {% block content %}
 
 
-
 <div class="page-container-photo">
     <div class="title-container">
         {% if user.username %}
@@ -22,19 +21,13 @@
     <div class="title-container">
         <p class="page-title">Likes: {{ num_likes }}</p>
         {% if user.username %}
-            <a href="{% url "photos:likes_API" photo.uu_id %}" class="edit-button">Like</a>
-
-            <form action="{% url "photos:likes_API" photo.uu_id %}" method="post">
-                {% csrf_token %}
-                <div id="like_button_container">
-                    <!-- React will load here -->
-                </div>
-                <button type="submit" class="btn-link">Like</button>
-            </form>
+            <div id="like-button-container">
+                <!-- React will load here -->
+            </div>
         {% endif%}
     </div>
 
-    <div id="likes-container">
+    <div id="app">
         <!-- React will load here -->
     </div>
 
