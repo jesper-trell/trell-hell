@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic.base import TemplateView
@@ -33,15 +34,25 @@ class LikesViewAPI(ListAPIView):
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request, *args, **kwargs):
+        photo = self.get_queryset()
+        like = Like.objects.create(
+            photo=photo,
+            user=self.request.user,
+            date=timezone.now()
+        )
+        like.save()
+
+        return redirect('photos:photo', photo_uu_id=photo.uu_id)
+        # return reverse(
+        #     'photos:photo',
+        #     kwargs={'photo_uu_id': photo.uu_id},
+        # )
+
     # def post(self, request, *args, **kwargs):
     #     photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
     #     like = Like.objects.create(photo=photo, user=self.request.user)
     #     like.save()
-
-    #     return reverse(
-    #         'photos:photo',
-    #         kwargs={'photo_uu_id': photo.uu_id},
-    #     )
 
 
 class UsersViewAPI(LoginRequiredMixin, ListCreateAPIView):

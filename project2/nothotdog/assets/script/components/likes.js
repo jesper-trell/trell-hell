@@ -26,7 +26,7 @@ class LikesApp extends Component {
 
 const Likes = ({ likes }) => {
     return (
-      <div className='page-container-photo'>
+      <div>
         <span>Liked by: </span>
         {likes.map(like => (
           <div style={ {display:'inline-block'} }>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import { ContactsApp } from './components/contacts';
 import { LikesApp } from './components/likes';
+import { LikeButtonApp } from './components/like_button';
 
 
 class Pagination extends Component {
@@ -68,15 +69,30 @@ class App extends Component {
 }
 
 const container = document.getElementById('app');
-render(<App />, container);
+if (container) {
+  render(<App />, container);
+}
 
 const pagination_container = document.getElementById('pagination');
-render(<Pagination />, pagination_container);
+if (pagination_container) {
+  render(<Pagination />, pagination_container);
+}
 
 const test_container = document.getElementById('test-container');
-render(<ContactsApp />, test_container);
+if (test_container) {
+  render(<ContactsApp />, test_container);
+
+}
 
 const likes_container = document.getElementById('likes-container');
-render(<LikesApp />, likes_container);
+if (likes_container) {
+  render(<LikesApp />, likes_container);
+
+}
+
+const like_button_container = document.getElementById('like-button-container');
+if (like_button_container) {
+  render(<LikesApp />, like_button_container);
+}
 
 export default App

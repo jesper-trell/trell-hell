@@ -4,6 +4,8 @@
 
 {% block content %}
 
+
+
 <div class="page-container-photo">
     <div class="title-container">
         {% if user.username %}
@@ -21,16 +23,19 @@
         <p class="page-title">Likes: {{ num_likes }}</p>
         {% if user.username %}
             <a href="{% url "photos:likes_API" photo.uu_id %}" class="edit-button">Like</a>
+
+            <form action="{% url "photos:likes_API" photo.uu_id %}" method="post">
+                {% csrf_token %}
+                <div id="like_button_container">
+                    <!-- React will load here -->
+                </div>
+                <button type="submit" class="btn-link">Like</button>
+            </form>
         {% endif%}
     </div>
 
-    <div>
-        <span>Liked by: </span>
-        {% for like in likes %}
-            <div style="display:inline-block;">
-                <p>{{ like.user }},</p>
-            </div>
-        {% endfor %}
+    <div id="likes-container">
+        <!-- React will load here -->
     </div>
 
     <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
