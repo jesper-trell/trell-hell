@@ -5,30 +5,33 @@ class LikeButtonApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      liked: true,
+      liked: false,
     };
+    this.initialState()
   }
 
   componentDidMount() {
-    this.setState(
-      {
-        liked: true,
+    console.log("finished rendering like button")
+    console.log(this.props.likes)
+  }
+
+  initialState = () => {
+    console.log('init state called')
+    this.props.likes.map(like => {
+      console.log(like.user.id)
+      if (like.user.id == context.currentUserID) {
+        console.log('exists')
+        this.setState({liked: true})
+      } else {
+        console.log('not exists')
+        this.setState({liked: false})
       }
-    )
-    // fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
-    //   .then(response => response.json())
-    //   .then((data) => {
-    //     this.setState({
-    //       likes: data,
-    //     })
-    //   })
-    //   .catch(console.log)
+    })
   }
 
   click_like = () => {
-    this.setState({
-      liked: !this.state.liked
-    });
+    console.log('button pressed')
+    this.props.updateLikes();
 
     if (!this.state.liked) {
       console.log("Added a like.")
@@ -45,9 +48,14 @@ class LikeButtonApp extends Component {
     } else if (this.state.liked) {
       console.log("Removed a like.")
     }
+
+    this.setState({
+      liked: !this.state.liked
+    });
   }
 
   render() {
+    console.log('rendering like_button')
     if (this.state.liked) {
       return (
         <button onClick={this.click_like} type="submit" className="btn-link">Unlike</button>

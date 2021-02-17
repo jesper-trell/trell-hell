@@ -28,50 +28,56 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      loaded: false,
-      placeholder: "Loading"
+      // data: [],
+      // likes: this.updateLikes(),
+      likes: []
+      // loaded: false,
+      // placeholder: "Loading"
     };
+    console.log('running the parent constructor')
+    this.updateLikes()
+    // data2 = this.getLikes()
+    console.log(this.getLikes())
+    // console.log(data2)
   }
 
-  componentDidMount() {
-    fetch("photos_API")
-      .then(response => {
-        if (response.status > 400) {
-          return this.setState(() => {
-            return { placeholder: "Something went wrong!" };
-          });
-        }
-        return response.json();
+  // componentDidMount() {
+  //   fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
+  //     .then(response => response.json())
+  //     .then((data) => {
+  //       this.setState({ likes: data })
+  //       // return data
+  //     })
+  //     .catch(console.log)
+  // }
+
+  getLikes = () => {
+    fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
+      .then(response => response.json())
+      .then((data) => {
+        return data;
       })
-      .then(data => {
-        this.setState(() => {
-          return {
-            data,
-            loaded: true
-          };
-        });
-      });
+      // .catch(console.log)
+  }
+
+  updateLikes = () => {
+    fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
+      .then(response => response.json())
+      .then((data) => {
+        this.setState({ likes: data })
+      })
+      .catch(console.log)
   }
 
   render() {
+    console.log("rendering parent")
+    console.log(this.state.likes)
     return (
       <div>
-        <LikesApp />
-        <LikeButtonApp />
-        {/* <LikeButtonApp items={displayedItems} /> */}
+        <LikesApp likes={ this.state.likes } />
+        <LikeButtonApp updateLikes={ this.updateLikes } likes={ this.state.likes } />
       </div>
     );
-
-    // return (
-    //   <ul>
-    //     {this.state.data.map(photo => {
-    //       return (
-    //         <img key={ photo.id } src={ photo.image } alt={ photo.uu_id } style={ {width:300, height:200} } />
-    //       );
-    //     })}
-    //   </ul>
-    // );
   }
 }
 
