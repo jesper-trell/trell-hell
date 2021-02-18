@@ -1,52 +1,41 @@
 import React, { Component } from "react";
-import get_cookie from '../get_cookie';
+
 
 class LikeButtonApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       liked: false,
+      buttonText: 'Like',
     };
-    this.initialState()
   }
 
   componentDidMount() {
-    console.log("finished rendering like button")
-    console.log(this.props.likes)
+    this.initialState()
   }
 
   initialState = () => {
-    console.log('init state called')
-    this.props.likes.map(like => {
+    for (let like of this.props.likes) {
       console.log(like.user.id)
       if (like.user.id == context.currentUserID) {
-        console.log('exists')
         this.setState({liked: true})
+        break;
       } else {
-        console.log('not exists')
         this.setState({liked: false})
       }
-    })
+    }
   }
 
   click_like = () => {
-    console.log('button pressed')
-    this.props.updateLikes();
-
+    console.log('Like button pressed')
     if (!this.state.liked) {
-      console.log("Added a like.")
-      const csrftoken = get_cookie('csrftoken');
-      fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like', {
-        credentials: 'same-origin',
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken
-        }
-      })
+      this.setState({ buttonText: 'Unlike' });
+      this.props.likeAction({method: 'POST'})
+      console.log("Added a like")
     } else if (this.state.liked) {
-      console.log("Removed a like.")
+      this.setState({ buttonText: 'Like' });
+      this.props.likeAction({method: 'DELETE'})
+      console.log("Removed a like")
     }
 
     this.setState({
@@ -55,18 +44,9 @@ class LikeButtonApp extends Component {
   }
 
   render() {
-    console.log('rendering like_button')
-    if (this.state.liked) {
-      return (
-        <button onClick={this.click_like} type="submit" className="btn-link">Unlike</button>
-        // <button onClick={this.click_like} type="submit" className="btn-link">Unlike</button>
-      )
-    } else {
-      return (
-        <button onClick={this.click_like} type="submit" className="btn-link">Like</button>
-        // <button onClick={this.click_like} type="submit" className="btn-link">Like</button>
-      )
-    }
+    return (
+      <button onClick={ this.click_like } type="submit" className="btn-link">{ this.state.buttonText }</button>
+    )
   }
 }
 

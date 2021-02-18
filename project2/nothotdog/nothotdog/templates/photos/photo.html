@@ -19,16 +19,11 @@
     </div>
 
     <div class="title-container">
-        <p class="page-title">Likes: {{ num_likes }}</p>
         {% if user.username %}
-            <div id="like-button-container">
+            <div id="app">
                 <!-- React will load here -->
             </div>
         {% endif%}
-    </div>
-
-    <div id="app">
-        <!-- React will load here -->
     </div>
 
     <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">

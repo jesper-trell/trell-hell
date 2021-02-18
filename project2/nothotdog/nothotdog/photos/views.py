@@ -43,7 +43,9 @@ class LikesViewAPI(ListAPIView):
 
     def delete(self, request, *args, **kwargs):
         photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-        photo.delete()
+        user = self.request.user
+        like = Like.objects.get(photo=photo, user=user)
+        like.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
