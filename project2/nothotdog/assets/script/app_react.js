@@ -5,6 +5,10 @@ import LikeButtonApp from './components/like_button';
 import get_cookie from './get_cookie';
 
 
+var containerData = document.querySelector('#app');
+var uuid = containerData.dataset.uuid;
+var stringAPI = uuid + '/like';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +19,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
+    fetch(stringAPI)
       .then(response => response.json())
       .then((data) => {
         this.setState({
@@ -27,7 +31,7 @@ class App extends Component {
   }
 
   updateLikes = () => {
-    fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like')
+      fetch(stringAPI)
       .then(response => response.json())
       .then((data) => {
         this.setState({
@@ -37,9 +41,9 @@ class App extends Component {
       .catch(console.log)
   }
 
-  likeAction = ({method}) => {
+  likeAction = ({ method }) => {
     const csrftoken = get_cookie('csrftoken');
-    fetch('http://127.0.0.1:8000/baf55abd-8e54-4eba-b61f-a1ae61008cf5/like', {
+    fetch(stringAPI, {
       credentials: 'same-origin',
       method: method,
       headers: {

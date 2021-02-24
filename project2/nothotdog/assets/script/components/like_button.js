@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 
 
+var containerData = document.querySelector('#app');
+var userid = containerData.dataset.userid;
+
 class LikeButtonApp extends Component {
   constructor(props) {
     super(props);
@@ -17,11 +20,13 @@ class LikeButtonApp extends Component {
   initialState = () => {
     for (let like of this.props.likes) {
       console.log(like.user.id)
-      if (like.user.id == context.currentUserID) {
+      if (like.user.id == userid) {
         this.setState({liked: true})
+        this.setState({buttonText: 'Unlike'})
         break;
       } else {
-        this.setState({liked: false})
+        this.setState({liked: true})
+        this.setState({buttonText: 'Like'})
       }
     }
   }

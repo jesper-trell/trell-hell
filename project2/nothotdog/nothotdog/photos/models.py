@@ -13,7 +13,7 @@ class Photo(models.Model):
     pub_date = models.DateTimeField('Date published')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flagged = models.BooleanField(default=False)
-    uu_id = models.UUIDField(default=uuid.uuid4, editable=False)
+    uu_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     # likes = models.ManyToManyField(User, through='Like')
 
     def __str__(self):

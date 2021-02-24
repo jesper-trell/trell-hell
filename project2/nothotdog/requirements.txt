@@ -9,3 +9,4 @@ tensorflow
 keras
 opencv
 djangorestframework
+django-debug-toolbar

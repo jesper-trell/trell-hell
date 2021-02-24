@@ -16,36 +16,28 @@ from rest_framework.response import Response
 from .models import Like, Photo
 
 
-class TestView(TemplateView):
-    template_name = 'frontend/test.html'
-
-
 class LikesViewAPI(ListAPIView):
     serializer_class = LikeSerializer
 
+    def get_photo(self):
+        return Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+
     def get_queryset(self):
-        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-        return Like.objects.filter(photo=photo)
+        return Like.objects.filter(photo=self.get_photo())
 
     def post(self, request, *args, **kwargs):
-        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-        like = Like.objects.create(
-            photo=photo,
+        Like.objects.create(
+            photo=self.get_photo(),
             user=self.request.user,
-            date=timezone.now()
+            date=timezone.now(),
         )
-
-        serializer = LikeSerializer(
-            like,
-            context={'request': request},
-        )
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
-        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-        user = self.request.user
-        like = Like.objects.get(photo=photo, user=user)
-        like.delete()
+        Like.objects.get(
+            photo=self.get_photo(),
+            user=self.request.user,
+        ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
