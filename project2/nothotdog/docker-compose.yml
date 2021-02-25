@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 127.0.0.1:8888
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+    ports:
+      - "8888:8888"
+    depends_on:
+      - postgres
+  postgres:
+    restart: always
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin1
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"

@@ -20,8 +20,8 @@ const Likes = ({ likes }) => {
     </span>
     <span>Liked by: </span>
     {likes.map((like) => (
-      <div style={{ display: 'inline-block' }}>
-        <p>
+      <div style={{ display: 'inline-block' }} key={ like.user.id }>
+        <p key={ like.user.id }>
           { like.user.username }
           ,
         </p>

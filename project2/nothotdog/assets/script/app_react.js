@@ -6,8 +6,10 @@ import get_cookie from './get_cookie';
 
 
 var containerData = document.querySelector('#app');
-var uuid = containerData.dataset.uuid;
-var stringAPI = uuid + '/like';
+if (containerData) {
+  var uuid = containerData.dataset.uuid;
+  var stringAPI = uuid + '/like';
+}
 
 class App extends Component {
   constructor(props) {

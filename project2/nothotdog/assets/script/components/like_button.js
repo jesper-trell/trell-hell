@@ -2,7 +2,9 @@ import React, { Component } from "react";
 
 
 var containerData = document.querySelector('#app');
-var userid = containerData.dataset.userid;
+if (containerData) {
+  var userid = containerData.dataset.userid;
+}
 
 class LikeButtonApp extends Component {
   constructor(props) {

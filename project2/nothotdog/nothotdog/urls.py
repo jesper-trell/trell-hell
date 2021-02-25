@@ -19,9 +19,19 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(
+        r'^favicon.ico$',
+        RedirectView.as_view(
+            url=staticfiles_storage.url('images/favicon.ico'),
+            permanent=False,
+        ),
+        name='favicon',
+    ),
     path('admin', admin.site.urls),
     path('__debug__', include(debug_toolbar.urls)),
     path('', include('nothotdog.photos.urls')),

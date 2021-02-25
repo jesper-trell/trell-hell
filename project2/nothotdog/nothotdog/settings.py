@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +28,10 @@ SECRET_KEY = 'uqeie!xzul-n#l366htzipauu1awzo&m)crjbu)sa*4#l=2%&6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    # '0.0.0.0',
+    # '127.0.0.1',
+]
 
 ADMINS = [
     ('Jesper', 'jesper@trell.se'),
@@ -87,16 +92,24 @@ WSGI_APPLICATION = 'nothotdog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+def get_env_value(env_variable, default_value):
+    try:
+        print(os.environ[env_variable])
+        return os.environ[env_variable]
+    except KeyError:
+        return default_value
+
+
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'photos',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'admin1',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        # 'HOST': '127.0.0.1',
+        'HOST': get_env_value('DATABASE_HOST', '127.0.0.1'),
+        'PORT': get_env_value('DATABASE_PORT', '5432'),
+        # 'PORT': '5432',
     }
 }
 
@@ -188,11 +201,11 @@ RABBITMQ_HOST = 'localhost'
 ML_DATA_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_data'
 ML_MODEL_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_CNN_model'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
-    ]
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAdminUser',
+#     ]
+# }
 
 LOGGING = {
     'version': 1,
