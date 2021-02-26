@@ -22,9 +22,8 @@
         {% if user.username %}
             <div
                 id="app"
-                data-uuid="{{ photo.uu_id }}"
                 data-userid="{{ user.id }}"
-                data-localhost="{{ request.get_host }}/"
+                data-likeurl="{% url "photos:like" photo.uu_id %}"
             >
                 <!-- React will load here -->
             </div>

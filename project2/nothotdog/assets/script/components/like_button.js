@@ -22,12 +22,13 @@ class LikeButtonApp extends Component {
   initialState = () => {
     for (let like of this.props.likes) {
       console.log(like.user.id)
+      console.log(userid)
       if (like.user.id == userid) {
         this.setState({liked: true})
         this.setState({buttonText: 'Unlike'})
         break;
       } else {
-        this.setState({liked: true})
+        this.setState({liked: false})
         this.setState({buttonText: 'Like'})
       }
     }

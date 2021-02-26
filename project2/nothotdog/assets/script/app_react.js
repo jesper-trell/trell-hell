@@ -7,8 +7,7 @@ import get_cookie from './get_cookie';
 
 var containerData = document.querySelector('#app');
 if (containerData) {
-  var uuid = containerData.dataset.uuid;
-  var stringAPI = uuid + '/like';
+  var likeURL = containerData.dataset.likeurl;
 }
 
 class App extends Component {
@@ -21,7 +20,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(stringAPI)
+    fetch(likeURL)
       .then(response => response.json())
       .then((data) => {
         this.setState({
@@ -33,7 +32,7 @@ class App extends Component {
   }
 
   updateLikes = () => {
-      fetch(stringAPI)
+      fetch(likeURL)
       .then(response => response.json())
       .then((data) => {
         this.setState({
@@ -45,7 +44,7 @@ class App extends Component {
 
   likeAction = ({ method }) => {
     const csrftoken = get_cookie('csrftoken');
-    fetch(stringAPI, {
+    fetch(likeURL, {
       credentials: 'same-origin',
       method: method,
       headers: {

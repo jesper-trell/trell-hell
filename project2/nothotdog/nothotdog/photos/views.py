@@ -19,15 +19,12 @@ from .models import Like, Photo
 class LikesViewAPI(ListAPIView):
     serializer_class = LikeSerializer
 
-    def get_photo(self):
-        return Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-
     def get_queryset(self):
-        return Like.objects.filter(photo=self.get_photo())
+        return Like.objects.filter(photo__uu_id=self.kwargs['photo_uu_id'])
 
     def post(self, request, *args, **kwargs):
         Like.objects.create(
-            photo=self.get_photo(),
+            photo=Photo.objects.get(uu_id=self.kwargs['photo_uu_id']),
             user=self.request.user,
             date=timezone.now(),
         )
@@ -35,7 +32,7 @@ class LikesViewAPI(ListAPIView):
 
     def delete(self, request, *args, **kwargs):
         Like.objects.get(
-            photo=self.get_photo(),
+            photo__uu_id=self.kwargs['photo_uu_id'],
             user=self.request.user,
         ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -95,16 +92,13 @@ class PhotoView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # photo = Photo.objects.prefetch_related('likes').annotate(
-        #     num_likes=models.Count('likes'),
-        #     username=models.F('user__name')
-        # ).get(uu_id=self.kwargs['photo_uu_id'])
-        photo = Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
-        likes = Like.objects.filter(photo=photo)
-        num_likes = likes.count()
+        photo = Photo.objects.prefetch_related('likes').annotate(
+            num_likes=models.Count('likes'),
+            username=models.F('user__username')
+        ).get(uu_id=self.kwargs['photo_uu_id'])
         context['photo'] = photo
-        context['num_likes'] = num_likes
-        context['likes'] = likes
+        context['num_likes'] = photo.num_likes
+        context['likes'] = photo.likes
         return context
 
 

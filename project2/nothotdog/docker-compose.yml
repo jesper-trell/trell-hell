@@ -4,7 +4,9 @@ services:
   web:
     build: .
     # command: python manage.py runserver 0.0.0.0:8000
-    command: python manage.py runserver 127.0.0.1:8888
+    command: python manage.py runserver 0.0.0.0:8888
+    # command: python manage.py runserver 127.0.0.1:8000
+    # command: python manage.py runserver 127.0.0.1:8888
     environment:
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432

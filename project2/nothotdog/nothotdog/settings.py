@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-from django.core.exceptions import ImproperlyConfigured
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,8 +27,6 @@ SECRET_KEY = 'uqeie!xzul-n#l366htzipauu1awzo&m)crjbu)sa*4#l=2%&6'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    # '0.0.0.0',
-    # '127.0.0.1',
 ]
 
 ADMINS = [
@@ -106,10 +102,8 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'admin1',
-        # 'HOST': '127.0.0.1',
         'HOST': get_env_value('DATABASE_HOST', '127.0.0.1'),
         'PORT': get_env_value('DATABASE_PORT', '5432'),
-        # 'PORT': '5432',
     }
 }
 
