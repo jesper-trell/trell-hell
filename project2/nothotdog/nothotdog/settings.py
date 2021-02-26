@@ -84,17 +84,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'nothotdog.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-def get_env_value(env_variable, default_value):
-    try:
-        print(os.environ[env_variable])
-        return os.environ[env_variable]
-    except KeyError:
-        return default_value
-
 
 DATABASES = {
     'default': {
@@ -102,8 +93,8 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'admin1',
-        'HOST': get_env_value('DATABASE_HOST', '127.0.0.1'),
-        'PORT': get_env_value('DATABASE_PORT', '5432'),
+        'HOST': os.environ.get('DATABASE_HOST', default='127.0.0.1'),
+        'PORT': 5432,
     }
 }
 
@@ -190,7 +181,7 @@ if not DEBUG:
 LOGIN_REDIRECT_URL = 'photos:index'
 LOGOUT_REDIRECT_URL = 'photos:index'
 
-RABBITMQ_HOST = 'localhost'
+RABBITMQ_HOST = os.environ.get('RABBITMQ_HOST', default='localhost')
 
 ML_DATA_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_data'
 ML_MODEL_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_CNN_model'

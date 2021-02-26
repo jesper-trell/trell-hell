@@ -1,20 +1,25 @@
 version: '3.8'
 
 services:
-  web:
+  django:
+    container_name: django
     build: .
-    # command: python manage.py runserver 0.0.0.0:8000
     command: python manage.py runserver 0.0.0.0:8888
-    # command: python manage.py runserver 127.0.0.1:8000
-    # command: python manage.py runserver 127.0.0.1:8888
     environment:
       - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
+      - RABBITMQ_HOST=rabbitmq
     ports:
-      - "8888:8888"
+      - 8888:8888
     depends_on:
       - postgres
+  listener:
+    container_name: listener
+    build: .
+    command: python manage.py uploadlistener
+    depends_on:
+      - rabbitmq
   postgres:
+    container_name: postgres
     restart: always
     image: postgres:latest
     environment:
@@ -22,4 +27,10 @@ services:
       - POSTGRES_PASSWORD=admin1
       - POSTGRES_DB=postgres
     ports:
-      - "5432:5432"
+      - 5432:5432
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15672
