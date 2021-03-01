@@ -12,12 +12,20 @@ services:
       - 8888:8888
     depends_on:
       - postgres
+    volumes:
+      - media:/code/media/images
   listener:
     container_name: listener
+    restart: on-failure
     build: .
     command: python manage.py uploadlistener
+    environment:
+      - DATABASE_HOST=postgres
+      - RABBITMQ_HOST=rabbitmq
     depends_on:
       - rabbitmq
+    volumes:
+      - media:/code/media/images
   postgres:
     container_name: postgres
     restart: always
@@ -34,3 +42,6 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+
+volumes:
+  media:
