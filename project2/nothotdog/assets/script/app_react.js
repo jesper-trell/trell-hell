@@ -20,26 +20,19 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(likeURL)
-      .then(response => response.json())
-      .then((data) => {
-        this.setState({
-          likes: data,
-          loaded: true
-        })
-      })
-      .catch(console.log)
+    this.updateLikes();
   }
 
   updateLikes = () => {
-      fetch(likeURL)
-      .then(response => response.json())
-      .then((data) => {
-        this.setState({
-          likes: data,
-        })
+    fetch(likeURL)
+    .then(response => response.json())
+    .then((data) => {
+      this.setState({
+        likes: data,
+        loaded: true,
       })
-      .catch(console.log)
+    })
+    .catch(console.log)
   }
 
   likeAction = ({ method }) => {

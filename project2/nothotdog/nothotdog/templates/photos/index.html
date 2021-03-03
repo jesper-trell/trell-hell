@@ -8,10 +8,12 @@
 <div class="page-container">
     <div class="title-container">
         <div class="page-title">
-        {% if user.username and index_view %}
+        {% if user.username and view == 'IndexView' %}
             <p><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> Photos</p>
-        {% elif user.username %}
+        {% elif user.username and view == 'ProfileView' %}
             <p><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> Profile</p>
+        {% elif user.username and view == 'LikedView' %}
+            <p><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> Liked</p>
         {% else %}
             <p><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> Photos</p>
         {% endif %}

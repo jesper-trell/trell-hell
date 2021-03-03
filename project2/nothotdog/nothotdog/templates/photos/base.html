@@ -10,19 +10,29 @@
         {% compress css %}
             <link rel="stylesheet" href="{% static "style/main.scss" %}" type="text/x-scss" media="screen">
         {% endcompress %}
-        {% comment %} <link rel="shortcut icon" type="image/png" href="{% static "images/favicon.ico" %}"/> {% endcomment %}
     </head>
 
     <div class="topnav">
         <img src="{% static "images/logo.svg" %}" alt="!HotdogLogo" style="height:35px;" class="vertical-center">
         <div class="topnav-right">
-            {% if index_view %}
+            {% if view == 'IndexView' %}
                 <a class="index-btn" href="{% url "photos:index" %}">Photos</a>
                 <a href="{% url "photos:profile" %}">Profile</a>
-            {% else %}
+                <a href="{% url "photos:liked" %}">Liked</a>
+            {% elif view == 'ProfileView' %}
                 <a href="{% url "photos:index" %}">Photos</a>
                 <a class="profile-btn" href="{% url "photos:profile" %}">Profile</a>
+                <a href="{% url "photos:liked" %}">Liked</a>
+            {% elif view == 'LikedView' %}
+                <a href="{% url "photos:index" %}">Photos</a>
+                <a href="{% url "photos:profile" %}">Profile</a>
+                <a class="liked-btn" href="{% url "photos:liked" %}">Liked</a>
+            {% else %}
+                <a href="{% url "photos:index" %}">Photos</a>
+                <a href="{% url "photos:profile" %}">Profile</a>
+                <a href="{% url "photos:liked" %}">Liked</a>
             {% endif %}
+
 
             <a class="upload-btn" href="{% url "photos:upload" %}">Upload</a>
 

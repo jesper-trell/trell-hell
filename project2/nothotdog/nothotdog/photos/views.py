@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db import models
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic.base import TemplateView
@@ -54,9 +53,10 @@ class ConfigurablePaginationMixin:
 
 
 class ExtraContext(object):
-    extra_context = {'index_view': True}
-
     def get_context_data(self, **kwargs):
+        self.extra_context = {
+            'view': self.request.resolver_match.func.__name__
+        }
         context = super(ExtraContext, self).get_context_data(**kwargs)
         context.update(self.extra_context)
         return context
@@ -71,6 +71,7 @@ class IndexView(ExtraContext, ConfigurablePaginationMixin, ListView):
 
 
 class ProfileView(
+    ExtraContext,
     ConfigurablePaginationMixin,
     LoginRequiredMixin,
     ListView
@@ -87,6 +88,23 @@ class ProfileView(
             ).order_by('-pub_date')
 
 
+class LikedView(
+    ExtraContext,
+    ConfigurablePaginationMixin,
+    LoginRequiredMixin,
+    ListView
+):
+    model = Photo
+    template_name = 'photos/index.html'
+    context_object_name = 'photos_list'
+    paginate_by = 30
+
+    def get_queryset(self):
+        # return self.request.user.likes.all().annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+        return self.model.objects.annotate(num_likes=models.Count('likes')).filter(flagged=False, likes=self.request.user).order_by('-num_likes')
+        # return self.model.objects.filter(flagged=False, likes=self.request.user).annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+
+
 class PhotoView(TemplateView):
     template_name = 'photos/photo.html'
 
@@ -96,6 +114,7 @@ class PhotoView(TemplateView):
             num_likes=models.Count('likes'),
             username=models.F('user__username')
         ).get(uu_id=self.kwargs['photo_uu_id'])
+
         context['photo'] = photo
         context['num_likes'] = photo.num_likes
         context['likes'] = photo.likes

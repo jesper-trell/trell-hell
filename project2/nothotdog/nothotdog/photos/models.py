@@ -14,7 +14,7 @@ class Photo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     flagged = models.BooleanField(default=False)
     uu_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    likes = models.ManyToManyField(User, through='Like', related_name='photos')
+    likes = models.ManyToManyField(User, through='Like', related_name='likes')
 
     def __str__(self):
         return self.title
