@@ -13,6 +13,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.response import Response
 
 from .models import Like, Photo
+from .utilities import send_alert_mail
 
 
 class LikesViewAPI(ListAPIView):
@@ -22,11 +23,12 @@ class LikesViewAPI(ListAPIView):
         return Like.objects.filter(photo__uu_id=self.kwargs['photo_uu_id'])
 
     def post(self, request, *args, **kwargs):
-        Like.objects.create(
+        like = Like.objects.create(
             photo=Photo.objects.get(uu_id=self.kwargs['photo_uu_id']),
             user=self.request.user,
             date=timezone.now(),
         )
+        send_alert_mail(like=like)
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
