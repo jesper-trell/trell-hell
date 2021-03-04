@@ -66,8 +66,15 @@ class IndexView(ExtraContext, ConfigurablePaginationMixin, ListView):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
-    queryset = model.objects.filter(flagged=False).order_by('-pub_date')
     paginate_by = 20
+
+    def get_queryset(self):
+        order_by = self.request.GET.get('order_by') or 'pub_date'
+        return self.model.objects.annotate(
+            num_likes=models.Count('likes')
+            ).filter(
+                flagged=False
+            ).order_by('-' + order_by)
 
 
 class ProfileView(
@@ -82,10 +89,13 @@ class ProfileView(
     paginate_by = 20
 
     def get_queryset(self):
-        return self.model.objects.filter(
-            flagged=False,
-            user=self.request.user,
-            ).order_by('-pub_date')
+        order_by = self.request.GET.get('order_by') or 'pub_date'
+        return self.model.objects.annotate(
+            num_likes=models.Count('likes')
+            ).filter(
+                flagged=False,
+                user=self.request.user,
+            ).order_by('-' + order_by)
 
 
 class LikedView(
@@ -100,9 +110,15 @@ class LikedView(
     paginate_by = 30
 
     def get_queryset(self):
-        # return self.request.user.likes.all().annotate(num_likes=models.Count('likes')).order_by('-num_likes')
-        return self.model.objects.annotate(num_likes=models.Count('likes')).filter(flagged=False, likes=self.request.user).order_by('-num_likes')
+        order_by = self.request.GET.get('order_by') or 'pub_date'
+        return self.model.objects.annotate(
+            num_likes=models.Count('likes')
+            ).filter(
+                flagged=False,
+                likes=self.request.user
+            ).order_by('-' + order_by)
         # return self.model.objects.filter(flagged=False, likes=self.request.user).annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+        # return self.request.user.likes.all().annotate(num_likes=models.Count('likes')).order_by('-num_likes')
 
 
 class PhotoView(TemplateView):

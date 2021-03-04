@@ -20,6 +20,14 @@
         </div>
     </div>
 
+    <div>
+        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.number }}&order_by=pub_date"><b>Order by date</b></a>
+        <span> - </span>
+        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.number }}&order_by=num_likes"><b>Order by likes</b></a>
+    </div>
+
+    <br>
+
     <div class="photos-container">
         {% if photos_list %}
             <div style="display:block;">
