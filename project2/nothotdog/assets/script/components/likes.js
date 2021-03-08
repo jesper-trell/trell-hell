@@ -12,10 +12,11 @@ class LikesApp extends Component {
 const Likes = ({ likes }) => {
   return(
   <div>
-    {/* <center><h1>Contact List</h1></center> */}
     <span>
       Likes:
       { likes.length }
+      {/* {'\u{1F32D}'} */}
+      🌭
       <br />
     </span>
     <span>Liked by: </span>

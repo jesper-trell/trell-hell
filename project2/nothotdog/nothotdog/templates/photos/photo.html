@@ -4,38 +4,45 @@
 
 {% block content %}
 
+{% if photo.flagged == False %}
+    <div class="page-container-photo">
+        <div class="title-container">
+            {% if user.username %}
+                <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
+            {% else %}
+                <p class="page-title"><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> {{ photo.title }}</p>
+            {% endif %}
 
-<div class="page-container-photo">
-    <div class="title-container">
-        {% if user.username %}
-            <p class="page-title"><span style="color:#0ccfff">{{ user.username }} </span><span style="color:gray">/</span> {{ photo.title }}</p>
-        {% else %}
-            <p class="page-title"><span style="color:#0ccfff">Guest </span><span style="color:gray">/</span> {{ photo.title }}</p>
-        {% endif %}
+            {% if user == photo.user %}
+                <a href="{% url "photos:edit" photo.uu_id %}" class="edit-button">Edit</a>
+            {% endif%}
+        </div>
 
-        {% if user == photo.user %}
-            <a href="{% url "photos:edit" photo.uu_id %}" class="edit-button">Edit</a>
-        {% endif%}
+        <div class="title-container">
+            {% if user.username %}
+                <div
+                    id="app"
+                    data-userid="{{ user.id }}"
+                    data-likeurl="{% url "photos:like" photo.uu_id %}"
+                >
+                    <!-- React will load here -->
+                </div>
+            {% endif%}
+        </div>
+
+        <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}">
+
+        <div class="title-container">
+            <span class="description">{{photo.description}}</span>
+            <span class="upload_user">Uploaded by: {{photo.user}}</span>
+        </div>
     </div>
-
-    <div class="title-container">
-        {% if user.username %}
-            <div
-                id="app"
-                data-userid="{{ user.id }}"
-                data-likeurl="{% url "photos:like" photo.uu_id %}"
-            >
-                <!-- React will load here -->
-            </div>
-        {% endif%}
+{% elif photo.flagged == True %}
+    <div class="page-container-photo">
+        <div class="title-container">
+            <p class="page-title">This photo has been flagged for not depicting a hotdog.</p>
+        </div>
     </div>
-
-    <img src="{{ photo.image.url }}" alt="{{ photo.uu_id }}" style="width:600px;height:400px;">
-
-    <div class="title-container">
-        <span class="description">{{photo.description}}</span>
-        <span class="upload_user">Uploaded by: {{photo.user}}</span>
-    </div>
-</div>
+{% endif %}
 
 {% endblock %}

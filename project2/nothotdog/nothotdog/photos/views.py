@@ -1,19 +1,19 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from nothotdog.photos.serializers import (LikeSerializer, PhotoSerializer,
-                                          UserSerializer)
+from nothotdog.photos.serializers import LikeSerializer
 from rest_framework import status
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Like, Photo
-from .utilities import send_alert_mail
+from .utilities import send_like_mail
 
 
 class LikesViewAPI(ListAPIView):
@@ -22,13 +22,14 @@ class LikesViewAPI(ListAPIView):
     def get_queryset(self):
         return Like.objects.filter(photo__uu_id=self.kwargs['photo_uu_id'])
 
+    @action(detail=True, permission_classes=[IsAuthenticated])
     def post(self, request, *args, **kwargs):
         like = Like.objects.create(
             photo=Photo.objects.get(uu_id=self.kwargs['photo_uu_id']),
             user=self.request.user,
             date=timezone.now(),
         )
-        send_alert_mail(like=like)
+        send_like_mail(like)
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
@@ -37,16 +38,6 @@ class LikesViewAPI(ListAPIView):
             user=self.request.user,
         ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class UsersViewAPI(LoginRequiredMixin, ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class PhotosViewAPI(LoginRequiredMixin, ListCreateAPIView):
-    queryset = Photo.objects.all()
-    serializer_class = PhotoSerializer
 
 
 class ConfigurablePaginationMixin:
@@ -74,9 +65,9 @@ class IndexView(ExtraContext, ConfigurablePaginationMixin, ListView):
         order_by = self.request.GET.get('order_by') or 'pub_date'
         return self.model.objects.annotate(
             num_likes=models.Count('likes')
-            ).filter(
-                flagged=False
-            ).order_by('-' + order_by)
+        ).filter(
+            flagged=False
+        ).order_by('-' + order_by)
 
 
 class ProfileView(
@@ -94,10 +85,10 @@ class ProfileView(
         order_by = self.request.GET.get('order_by') or 'pub_date'
         return self.model.objects.annotate(
             num_likes=models.Count('likes')
-            ).filter(
-                flagged=False,
-                user=self.request.user,
-            ).order_by('-' + order_by)
+        ).filter(
+            flagged=False,
+            user=self.request.user,
+        ).order_by('-' + order_by)
 
 
 class LikedView(
@@ -115,12 +106,10 @@ class LikedView(
         order_by = self.request.GET.get('order_by') or 'pub_date'
         return self.model.objects.annotate(
             num_likes=models.Count('likes')
-            ).filter(
-                flagged=False,
-                likes=self.request.user
-            ).order_by('-' + order_by)
-        # return self.model.objects.filter(flagged=False, likes=self.request.user).annotate(num_likes=models.Count('likes')).order_by('-num_likes')
-        # return self.request.user.likes.all().annotate(num_likes=models.Count('likes')).order_by('-num_likes')
+        ).filter(
+            flagged=False,
+            likes=self.request.user
+        ).order_by('-' + order_by)
 
 
 class PhotoView(TemplateView):

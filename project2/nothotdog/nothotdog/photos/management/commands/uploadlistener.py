@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from hotdog_finder.data_augmentation import normalize_images, to_gray
 from nothotdog.photos.models import Photo
-from nothotdog.photos.utilities import send_alert_mail
+from nothotdog.photos.utilities import send_flag_mail
 from tensorflow import keras
 
 
@@ -39,7 +39,7 @@ class Command(BaseCommand):
             prediction, is_hotdog = process_image(photo)
             hotdog_probability = round(prediction[0] * 100, 1)
             if not is_hotdog:
-                send_alert_mail(photo=photo)
+                send_flag_mail(photo)
                 photo.flagged = True
                 print(f' [x] Flagged {photo}.')
                 logger.info(f'[x] Flagged {photo}.')

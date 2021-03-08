@@ -186,11 +186,11 @@ RABBITMQ_HOST = os.environ.get('RABBITMQ_HOST', default='localhost')
 ML_DATA_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_data'
 ML_MODEL_PATH = str(BASE_DIR) + '/hotdog_finder/hotdog_CNN_model'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAdminUser',
-#     ]
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
 
 LOGGING = {
     'version': 1,
