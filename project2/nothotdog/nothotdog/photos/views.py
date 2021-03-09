@@ -42,7 +42,7 @@ class LikesViewAPI(ListAPIView):
 
 class ConfigurablePaginationMixin:
     def get_paginate_by(self, queryset):
-        return self.request.GET.get('paginate_by') or self.paginate_by
+        return self.request.GET.get('paginate_by', default=self.paginate_by)
 
 
 class IndexView(ConfigurablePaginationMixin, ListView):
@@ -52,7 +52,7 @@ class IndexView(ConfigurablePaginationMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        order_by = self.request.GET.get('order_by') or 'pub_date'
+        order_by = self.request.GET.get('order_by', default='pub_date')
         return self.model.objects.annotate(
             num_likes=Count('likes')
         ).filter(
@@ -71,7 +71,7 @@ class ProfileView(
     paginate_by = 20
 
     def get_queryset(self):
-        order_by = self.request.GET.get('order_by') or 'pub_date'
+        order_by = self.request.GET.get('order_by', default='pub_date')
         return self.model.objects.annotate(
             num_likes=Count('likes')
         ).filter(
@@ -91,7 +91,7 @@ class LikedView(
     paginate_by = 30
 
     def get_queryset(self):
-        order_by = self.request.GET.get('order_by') or 'pub_date'
+        order_by = self.request.GET.get('order_by', default='pub_date')
         return self.model.objects.annotate(
             num_likes=Count('likes')
         ).filter(

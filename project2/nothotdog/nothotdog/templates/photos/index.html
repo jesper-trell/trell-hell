@@ -4,6 +4,7 @@
 
 {% block content %}
 
+{% load index_tags %}
 
 <div class="page-container">
     <div class="title-container">
@@ -21,9 +22,9 @@
     </div>
 
     <div>
-        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.number }}&order_by=pub_date"><b>Order by date</b></a>
+        <a href="?{% url_replace 'order_by' 'pub_date' %}"><b>Order by date</b></a>
         <span> - </span>
-        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.number }}&order_by=num_likes"><b>Order by likes</b></a>
+        <a href="?{% url_replace 'order_by' 'num_likes' %}"><b>Order by likes</b></a>
     </div>
 
     <br>
@@ -43,31 +44,34 @@
             </div>
 
             <div class="pagination-container">
-                <form method="GET">
-                    <select name="paginate_by">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                    </select>
-                    <input type="submit" value="Paginate">
-                </form>
+                <span>
+                    Pagination:
+                </span>
+
+                <a href="?{% url_replace 'paginate_by' 10 %}"><b>10</b></a>
+                <a href="?{% url_replace 'paginate_by' 20 %}"><b>20</b></a>
+                <a href="?{% url_replace 'paginate_by' 30 %}"><b>30</b></a>
+                <a href="?{% url_replace 'paginate_by' 40 %}"><b>40</b></a>
+                <a href="?{% url_replace 'paginate_by' 50 %}"><b>50</b></a>
+                <a href="?{% url_replace 'paginate_by' 60 %}"><b>60</b></a>
+
+                <br>
 
                 <span class="pagination-links">
                     {% if page_obj.has_previous %}
-                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page=1">&laquo; First</a>
-                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                        <a href="?{% url_replace 'page' '1' %}">&laquo; First</a>
+                        <a href="?{% url_replace 'page' page_obj.previous_page_number %}">&laquo; First</a>
                     {% endif %}
                 </span>
 
                 <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
 
+                <br>
+
                 <span class="pagination-links">
                     {% if page_obj.has_next %}
-                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.next_page_number }}">Next</a>
-                        <a href="?paginate_by={{ page_obj.paginator.per_page }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        <a href="?{% url_replace 'page' page_obj.next_page_number %}">Next</a>
+                        <a href="?{% url_replace 'page' page_obj.paginator.num_pages %}">Last &raquo;</a>
                     {% endif %}
                 </span>
             </div>
