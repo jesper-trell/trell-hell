@@ -10,7 +10,7 @@ urlpatterns = [
     path('profile', views.ProfileView.as_view(), name='profile'),
     path('upload', views.UploadView.as_view(), name='upload'),
     path('liked', views.LikedView.as_view(), name='liked'),
-    path('<str:photo_uu_id>', views.PhotoView.as_view(), name='photo'),
-    path('<str:photo_uu_id>/like', views.LikesViewAPI.as_view(), name='like'),
-    path('<str:photo_uu_id>/edit', views.EditView.as_view(), name='edit'),
+    path('<str:uuid>', views.PhotoView.as_view(), name='photo'),
+    path('<str:uuid>/like', views.LikesViewAPI.as_view(), name='like'),
+    path('<str:uuid>/edit', views.EditView.as_view(), name='edit'),
 ]

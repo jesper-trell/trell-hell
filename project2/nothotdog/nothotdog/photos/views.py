@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db import models
+from django.db.models import Count
 from django.urls import reverse
-from django.utils import timezone
-from django.views.generic.base import TemplateView
+from django.utils.timezone import now
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from nothotdog.photos.serializers import LikeSerializer
 from rest_framework import status
 from rest_framework.decorators import action
@@ -20,21 +20,21 @@ class LikesViewAPI(ListAPIView):
     serializer_class = LikeSerializer
 
     def get_queryset(self):
-        return Like.objects.filter(photo__uu_id=self.kwargs['photo_uu_id'])
+        return Like.objects.filter(photo__uu_id=self.kwargs['uuid'])
 
     @action(detail=True, permission_classes=[IsAuthenticated])
     def post(self, request, *args, **kwargs):
         like = Like.objects.create(
-            photo=Photo.objects.get(uu_id=self.kwargs['photo_uu_id']),
+            photo=Photo.objects.get(uu_id=self.kwargs['uuid']),
             user=self.request.user,
-            date=timezone.now(),
+            date=now(),
         )
         send_like_mail(like)
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request, *args, **kwargs):
         Like.objects.get(
-            photo__uu_id=self.kwargs['photo_uu_id'],
+            photo__uu_id=self.kwargs['uuid'],
             user=self.request.user,
         ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -45,17 +45,7 @@ class ConfigurablePaginationMixin:
         return self.request.GET.get('paginate_by') or self.paginate_by
 
 
-class ExtraContext(object):
-    def get_context_data(self, **kwargs):
-        self.extra_context = {
-            'view': self.request.resolver_match.func.__name__
-        }
-        context = super(ExtraContext, self).get_context_data(**kwargs)
-        context.update(self.extra_context)
-        return context
-
-
-class IndexView(ExtraContext, ConfigurablePaginationMixin, ListView):
+class IndexView(ConfigurablePaginationMixin, ListView):
     model = Photo
     template_name = 'photos/index.html'
     context_object_name = 'photos_list'
@@ -64,14 +54,13 @@ class IndexView(ExtraContext, ConfigurablePaginationMixin, ListView):
     def get_queryset(self):
         order_by = self.request.GET.get('order_by') or 'pub_date'
         return self.model.objects.annotate(
-            num_likes=models.Count('likes')
+            num_likes=Count('likes')
         ).filter(
             flagged=False
         ).order_by('-' + order_by)
 
 
 class ProfileView(
-    ExtraContext,
     ConfigurablePaginationMixin,
     LoginRequiredMixin,
     ListView
@@ -84,7 +73,7 @@ class ProfileView(
     def get_queryset(self):
         order_by = self.request.GET.get('order_by') or 'pub_date'
         return self.model.objects.annotate(
-            num_likes=models.Count('likes')
+            num_likes=Count('likes')
         ).filter(
             flagged=False,
             user=self.request.user,
@@ -92,7 +81,6 @@ class ProfileView(
 
 
 class LikedView(
-    ExtraContext,
     ConfigurablePaginationMixin,
     LoginRequiredMixin,
     ListView
@@ -105,27 +93,18 @@ class LikedView(
     def get_queryset(self):
         order_by = self.request.GET.get('order_by') or 'pub_date'
         return self.model.objects.annotate(
-            num_likes=models.Count('likes')
+            num_likes=Count('likes')
         ).filter(
             flagged=False,
             likes=self.request.user
         ).order_by('-' + order_by)
 
 
-class PhotoView(TemplateView):
+class PhotoView(DetailView):
+    model = Photo
     template_name = 'photos/photo.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        photo = Photo.objects.prefetch_related('likes').annotate(
-            num_likes=models.Count('likes'),
-            username=models.F('user__username')
-        ).get(uu_id=self.kwargs['photo_uu_id'])
-
-        context['photo'] = photo
-        context['num_likes'] = photo.num_likes
-        context['likes'] = photo.likes
-        return context
+    slug_url_kwarg = 'uuid'
+    slug_field = 'uu_id'
 
 
 class EditView(LoginRequiredMixin, UpdateView):
@@ -136,11 +115,11 @@ class EditView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse(
             'photos:photo',
-            kwargs={'photo_uu_id': self.kwargs['photo_uu_id']},
+            kwargs={'uuid': self.kwargs['uuid']},
         )
 
     def get_object(self):
-        return Photo.objects.get(uu_id=self.kwargs['photo_uu_id'])
+        return Photo.objects.get(uu_id=self.kwargs['uuid'])
 
 
 class UploadView(LoginRequiredMixin, CreateView):
@@ -154,7 +133,7 @@ class UploadView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.photo = form.save(commit=False)
-        self.photo.pub_date = timezone.now()
+        self.photo.pub_date = now()
         self.photo.user = self.request.user
 
         return super(UploadView, self).form_valid(form)
@@ -162,5 +141,5 @@ class UploadView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse(
             'photos:photo',
-            kwargs={'photo_uu_id': self.photo.uu_id},
+            kwargs={'uuid': self.photo.uu_id},
         )
